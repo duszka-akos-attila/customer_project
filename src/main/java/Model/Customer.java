@@ -1,4 +1,4 @@
-package model;
+package Model;
 
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
@@ -11,7 +11,7 @@ import java.util.Date;
 @ToString
 @Getter
 @EqualsAndHashCode
-public class customer {
+public class Customer {
     private int customerId;
     private int storeId;
     private String firstName;

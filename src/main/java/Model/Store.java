@@ -1,4 +1,4 @@
-package model;
+package Model;
 
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
@@ -11,7 +11,7 @@ import java.util.Date;
 @ToString
 @Getter
 @EqualsAndHashCode
-public class store {
+public class Store {
     private int storeId;
     private int managerStaffId;
     private int addressId;

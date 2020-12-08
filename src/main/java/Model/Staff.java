@@ -1,4 +1,4 @@
-package model;
+package Model;
 
 import lombok.*;
 
@@ -8,7 +8,7 @@ import java.util.Date;
 @ToString
 @Getter
 @EqualsAndHashCode
-public class staff {
+public class Staff {
     private int staffId;
     private String firstName;
     private String lastName;

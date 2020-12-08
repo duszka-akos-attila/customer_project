@@ -1,4 +1,4 @@
-package model.address;
+package Model.Address;
 
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
@@ -11,9 +11,13 @@ import java.util.Date;
 @ToString
 @Getter
 @EqualsAndHashCode
-public class city {
+public class Address {
+    private int addressId;
+    private String address;
+    private String address2;
+    private String district;
     private int cityId;
-    private String city;
-    private int countryId;
+    private String postalCode;
+    private String phone;
     private Date lastUpdate;
 }

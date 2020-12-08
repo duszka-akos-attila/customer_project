@@ -1,4 +1,4 @@
-package model.address;
+package Model.Address;
 
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
@@ -11,7 +11,7 @@ import java.util.Date;
 @ToString
 @Getter
 @EqualsAndHashCode
-public class country {
+public class Country {
     private int countryId;
     private String country;
     private Date lastUpdate;
