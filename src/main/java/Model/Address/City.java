@@ -5,7 +5,7 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.ToString;
 
-import java.util.Date;
+import java.sql.Timestamp;
 
 @AllArgsConstructor
 @ToString
@@ -15,5 +15,5 @@ public class City {
     private int cityId;
     private String city;
     private int countryId;
-    private Date lastUpdate;
+    private Timestamp lastUpdate;
 }
