@@ -7,5 +7,8 @@ import org.springframework.data.repository.CrudRepository;
 import java.util.Collection;
 
 public interface CityRepository extends CrudRepository<CityEntity, Integer> {
-    Collection<CityEntity> findByNameAndCountry(String name, CountryEntity countryEntity);
+
+    Collection<CityEntity> findByCityAndCountry(String city, CountryEntity countryEntity);
+
+    Collection<CityEntity> findByCityId(int cityId);
 }
