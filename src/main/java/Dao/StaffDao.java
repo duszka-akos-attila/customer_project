@@ -8,9 +8,9 @@ public interface StaffDao {
 
     Collection<Staff> readAll();
 
-    void createStaff(Staff staff);
+    void createStaff(Staff staff) throws Exception;
 
-    void updateFirstMatch(Staff staff, Staff updatedStaff);
+    void updateFirstMatch(Staff staff, Staff updatedStaff) throws Exception;
 
-    void deleteStaff(Staff staff);
+    void deleteStaff(Staff staff) throws Exception;
 }

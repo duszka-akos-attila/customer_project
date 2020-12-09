@@ -8,9 +8,9 @@ public interface StoreDao {
 
     Collection<Store> readAll();
 
-    void createStore(Store store);
+    void createStore(Store store) throws Exception;
 
-    void updateFirstMatch(Store store, Store updatedStore);
+    void updateFirstMatch(Store store, Store updatedStore) throws Exception;
 
-    void deleteStore(Store store);
+    void deleteStore(Store store) throws Exception;
 }

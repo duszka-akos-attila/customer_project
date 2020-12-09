@@ -10,7 +10,7 @@ public interface CountryDao {
 
     void createCountry(Country country);
 
-    void updateFirstMatch(Country country, Country updatedCountry);
+    void updateFirstMatch(Country country, Country updatedCountry) throws Exception;
 
-    void deleteCountry(Country country);
+    void deleteCountry(Country country) throws Exception;
 }
