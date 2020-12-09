@@ -1,6 +1,7 @@
 package Service;
 
 import Model.Country;
+import Exception.UnknownCountryException;
 
 import java.util.Collection;
 
@@ -10,7 +11,7 @@ public interface CountryService {
 
     void recordCountry(Country country);
 
-    void updateFirstMatch(Country originalCountry, Country updatedCountry);
+    void updateFirstMatch(Country originalCountry, Country updatedCountry) throws UnknownCountryException;
 
-    void deleteCountry(Country country);
+    void deleteCountry(Country country) throws UnknownCountryException;
 }
