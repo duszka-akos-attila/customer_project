@@ -50,7 +50,7 @@ public class CountryDaoImplementation implements CountryDao{
     }
 
     @Override
-    public void updateFirstMatch(Country country, Country updatedCountry) throws Exception {
+    public void updateFirstMatch(Country country, Country updatedCountry) throws UnknownCountryException {
         Optional<CountryEntity> countryEntity = countryRepository.findByCountry(
                 country.getCountry())
                 .stream()
@@ -73,7 +73,7 @@ public class CountryDaoImplementation implements CountryDao{
     }
 
     @Override
-    public void deleteCountry(Country country) throws Exception {
+    public void deleteCountry(Country country) throws UnknownCountryException {
         Optional<CountryEntity> countryEntity = countryRepository.findByCountry(
                 country.getCountry())
                 .stream()
