@@ -5,7 +5,6 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.ToString;
 
-import java.sql.Date;
 import java.sql.Timestamp;
 
 @AllArgsConstructor
@@ -20,6 +19,6 @@ public class Customer {
     private String email;
     private int addressId;
     private int active;
-    private Date createDate;
+    private Timestamp createDate;
     private Timestamp lastUpdate;
 }
