@@ -1,6 +1,5 @@
 package Dao.Entity;
 
-import Dao.Entity.Address.AddressEntity;
 import lombok.*;
 
 import javax.persistence.*;

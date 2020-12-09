@@ -1,4 +1,4 @@
-package Model.Address;
+package Model;
 
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
@@ -11,8 +11,13 @@ import java.sql.Timestamp;
 @ToString
 @Getter
 @EqualsAndHashCode
-public class Country {
-    private int countryId;
-    private String country;
+public class Address {
+    private int addressId;
+    private String address;
+    private String address2;
+    private String district;
+    private int cityId;
+    private String postalCode;
+    private String phone;
     private Timestamp lastUpdate;
 }

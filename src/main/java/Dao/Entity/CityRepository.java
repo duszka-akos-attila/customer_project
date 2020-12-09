@@ -1,4 +1,4 @@
-package Dao.Entity.Address;
+package Dao.Entity;
 
 import org.springframework.data.repository.CrudRepository;
 

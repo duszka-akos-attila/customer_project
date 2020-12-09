@@ -1,4 +1,4 @@
-package Dao.Address;
+package Dao;
 
 public class AddressDaoImplementation {
 }
