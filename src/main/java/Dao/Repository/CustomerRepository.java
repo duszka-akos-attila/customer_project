@@ -1,5 +1,8 @@
-package Dao.Entity;
+package Dao.Repository;
 
+import Dao.Entity.AddressEntity;
+import Dao.Entity.CustomerEntity;
+import Dao.Entity.StoreEntity;
 import org.springframework.data.repository.CrudRepository;
 
 import java.sql.Timestamp;

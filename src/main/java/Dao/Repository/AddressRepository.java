@@ -1,5 +1,7 @@
-package Dao.Entity;
+package Dao.Repository;
 
+import Dao.Entity.AddressEntity;
+import Dao.Entity.CityEntity;
 import org.springframework.data.repository.CrudRepository;
 
 import java.util.Collection;

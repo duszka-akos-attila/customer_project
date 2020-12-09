@@ -1,5 +1,8 @@
-package Dao.Entity;
+package Dao.Repository;
 
+import Dao.Entity.AddressEntity;
+import Dao.Entity.StaffEntity;
+import Dao.Entity.StoreEntity;
 import org.springframework.data.repository.CrudRepository;
 
 import java.util.Collection;

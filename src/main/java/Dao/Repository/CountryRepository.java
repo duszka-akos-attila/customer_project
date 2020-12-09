@@ -1,5 +1,6 @@
-package Dao.Entity;
+package Dao.Repository;
 
+import Dao.Entity.CountryEntity;
 import org.springframework.data.repository.CrudRepository;
 
 import java.util.Collection;
