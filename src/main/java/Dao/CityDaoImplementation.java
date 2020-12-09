@@ -5,6 +5,8 @@ import Dao.Entity.CountryEntity;
 import Dao.Repository.CityRepository;
 import Dao.Repository.CountryRepository;
 import Model.City;
+import Exception.UnknownCityException;
+import Exception.UnknownCountryException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -33,7 +35,7 @@ public class CityDaoImplementation implements CityDao{
     }
 
     @Override
-    public void createCity(City city) throws Exception {
+    public void createCity(City city) throws UnknownCountryException {
 
         CityEntity cityEntity;
 
@@ -54,7 +56,7 @@ public class CityDaoImplementation implements CityDao{
     }
 
     @Override
-    public void updateFirstMatch(City city, City updatedCity) throws Exception {
+    public void updateFirstMatch(City city, City updatedCity) throws UnknownCityException,UnknownCountryException {
         Optional<CityEntity> cityEntity = cityRepository.findByCityAndCountry(
                 city.getCity(),
                 queryCountry(city.getCountryId()))
@@ -62,7 +64,7 @@ public class CityDaoImplementation implements CityDao{
                 .findFirst();
 
         if(!cityEntity.isPresent()){
-            throw new Exception("Unknown City: "+ city.toString());
+            throw new UnknownCityException(city, "City unknown");
         }
 
         cityEntity.get().setCity(updatedCity.getCity());
@@ -78,7 +80,7 @@ public class CityDaoImplementation implements CityDao{
     }
 
     @Override
-    public void deleteCity(City city) throws Exception {
+    public void deleteCity(City city) throws UnknownCityException, UnknownCountryException{
         Optional<CityEntity> cityEntity = cityRepository.findByCityAndCountry(
                 city.getCity(),
                 queryCountry(city.getCountryId()))
@@ -86,7 +88,7 @@ public class CityDaoImplementation implements CityDao{
                 .findFirst();
 
         if(!cityEntity.isPresent()){
-            throw new Exception("Unknown city: " +city.toString());
+            throw new UnknownCityException(city, "City unknown");
         }
 
         try{
@@ -97,12 +99,12 @@ public class CityDaoImplementation implements CityDao{
         }
     }
 
-    protected CountryEntity queryCountry(int countryId) throws Exception {
+    protected CountryEntity queryCountry(int countryId) throws UnknownCountryException {
         Optional<CountryEntity> countryEntity = countryRepository.findByCountryId(countryId).stream()
                 .filter(entity -> entity.getCountryId() == (countryId))
                 .findFirst();
         if( !countryEntity.isPresent()){
-            throw new Exception("Unknown country");
+            throw new UnknownCountryException("Country unknown");
         }
         return countryEntity.get();
     }

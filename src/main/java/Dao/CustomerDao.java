@@ -1,6 +1,9 @@
 package Dao;
 
 import Model.Customer;
+import Exception.UnknownAddressException;
+import Exception.UnknownCustomerException;
+import Exception.UnknownStoreException;
 
 import java.util.Collection;
 
@@ -8,9 +11,9 @@ public interface CustomerDao {
 
     Collection<Customer> readAll();
 
-    void createCustomer(Customer customer) throws Exception;
+    void createCustomer(Customer customer) throws UnknownStoreException, UnknownAddressException;
 
-    void updateFirstMatch(Customer customer, Customer updatedCustomer) throws Exception;
+    void updateFirstMatch(Customer customer, Customer updatedCustomer) throws UnknownCustomerException, UnknownStoreException, UnknownAddressException;
 
-    void deleteCustomer(Customer customer) throws Exception;
+    void deleteCustomer(Customer customer) throws UnknownCustomerException, UnknownStoreException, UnknownAddressException;
 }

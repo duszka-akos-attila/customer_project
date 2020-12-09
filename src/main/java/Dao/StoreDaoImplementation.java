@@ -7,6 +7,9 @@ import Dao.Repository.AddressRepository;
 import Dao.Repository.StaffRepository;
 import Dao.Repository.StoreRepository;
 import Model.Store;
+import Exception.UnknownAddressException;
+import Exception.UnknownStaffException;
+import Exception.UnknownStoreException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -36,7 +39,7 @@ public class StoreDaoImplementation implements StoreDao{
     }
 
     @Override
-    public void createStore(Store store) throws Exception {
+    public void createStore(Store store) throws UnknownStaffException, UnknownAddressException {
         StoreEntity storeEntity;
 
         storeEntity = StoreEntity.builder()
@@ -55,7 +58,7 @@ public class StoreDaoImplementation implements StoreDao{
     }
 
     @Override
-    public void updateFirstMatch(Store store, Store updatedStore) throws Exception {
+    public void updateFirstMatch(Store store, Store updatedStore) throws UnknownStoreException, UnknownStaffException, UnknownAddressException {
         Optional<StoreEntity> storeEntity = storeRepository.findByManagerStaffAndAddress(
                 queryStaff(store.getManagerStaffId()),
                 queryAddress(store.getAddressId()))
@@ -63,7 +66,7 @@ public class StoreDaoImplementation implements StoreDao{
                 .findFirst();
 
         if(!storeEntity.isPresent()){
-            throw new Exception("Unknown store: "+ store.toString());
+            throw new UnknownStoreException(store, "Store unknown");
         }
 
         storeEntity.get().setManagerStaffEntity(queryStaff(updatedStore.getManagerStaffId()));
@@ -79,7 +82,7 @@ public class StoreDaoImplementation implements StoreDao{
     }
 
     @Override
-    public void deleteStore(Store store) throws Exception {
+    public void deleteStore(Store store) throws UnknownStoreException, UnknownStaffException, UnknownAddressException {
         Optional<StoreEntity> storeEntity = storeRepository.findByManagerStaffAndAddress(
                 queryStaff(store.getManagerStaffId()),
                 queryAddress(store.getAddressId()))
@@ -87,7 +90,7 @@ public class StoreDaoImplementation implements StoreDao{
                 .findFirst();
 
         if(!storeEntity.isPresent()){
-            throw new Exception("Unknown Store: " +store.toString());
+            throw new UnknownStoreException(store, "Store unknown");
         }
 
         try{
@@ -98,22 +101,22 @@ public class StoreDaoImplementation implements StoreDao{
         }
     }
 
-    protected AddressEntity queryAddress(int addressId) throws Exception {
+    protected AddressEntity queryAddress(int addressId) throws UnknownAddressException {
         Optional<AddressEntity> addressEntity = addressRepository.findByAddressId(addressId).stream()
                 .filter(entity -> entity.getAddressId() == (addressId))
                 .findFirst();
         if( !addressEntity.isPresent()){
-            throw new Exception("Unknown address");
+            throw new UnknownAddressException("Address unknown");
         }
         return addressEntity.get();
     }
 
-    protected StaffEntity queryStaff(int staffId) throws Exception {
+    protected StaffEntity queryStaff(int staffId) throws UnknownStaffException {
         Optional<StaffEntity> staffEntity = staffRepository.findByStaffId(staffId).stream()
                 .filter(entity -> entity.getStaffId() == (staffId))
                 .findFirst();
         if( !staffEntity.isPresent()){
-            throw new Exception("Unknown Staff");
+            throw new UnknownStaffException("Staff unknown");
         }
         return staffEntity.get();
     }

@@ -7,6 +7,9 @@ import Dao.Repository.AddressRepository;
 import Dao.Repository.CustomerRepository;
 import Dao.Repository.StoreRepository;
 import Model.Customer;
+import Exception.UnknownAddressException;
+import Exception.UnknownCustomerException;
+import Exception.UnknownStoreException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -41,7 +44,7 @@ public class CustomerDaoImplementation implements CustomerDao{
     }
 
     @Override
-    public void createCustomer(Customer customer) throws Exception {
+    public void createCustomer(Customer customer) throws UnknownStoreException, UnknownAddressException {
         CustomerEntity customerEntity;
 
         customerEntity = CustomerEntity.builder()
@@ -64,7 +67,7 @@ public class CustomerDaoImplementation implements CustomerDao{
     }
 
     @Override
-    public void updateFirstMatch(Customer customer, Customer updatedCustomer) throws Exception {
+    public void updateFirstMatch(Customer customer, Customer updatedCustomer) throws UnknownCustomerException, UnknownStoreException, UnknownAddressException {
         Optional<CustomerEntity> customerEntity = customerRepository.findByStoreAndFirstNameAndLastNameAndEmailAndAddressAndActiveAndCreateDate(
                 queryStore(customer.getStoreId()),
                 customer.getFirstName(),
@@ -77,7 +80,7 @@ public class CustomerDaoImplementation implements CustomerDao{
                 .findFirst();
 
         if(!customerEntity.isPresent()){
-            throw new Exception("Unknown Customer : "+ customer.toString());
+            throw new UnknownCustomerException(customer, "Customer unknown");
         }
 
         customerEntity.get().setStoreEntity(queryStore(updatedCustomer.getStoreId()));
@@ -98,7 +101,7 @@ public class CustomerDaoImplementation implements CustomerDao{
     }
 
     @Override
-    public void deleteCustomer(Customer customer) throws Exception {
+    public void deleteCustomer(Customer customer) throws UnknownCustomerException, UnknownStoreException, UnknownAddressException {
         Optional<CustomerEntity> customerEntity = customerRepository.findByStoreAndFirstNameAndLastNameAndEmailAndAddressAndActiveAndCreateDate(
                 queryStore(customer.getStoreId()),
                 customer.getFirstName(),
@@ -111,7 +114,7 @@ public class CustomerDaoImplementation implements CustomerDao{
                 .findFirst();
 
         if(!customerEntity.isPresent()){
-            throw new Exception("Unknown Customer: " +customer.toString());
+            throw new UnknownCustomerException(customer, "Customer unknown");
         }
 
         try{
@@ -122,22 +125,22 @@ public class CustomerDaoImplementation implements CustomerDao{
         }
     }
 
-    protected AddressEntity queryAddress(int addressId) throws Exception {
+    protected AddressEntity queryAddress(int addressId) throws UnknownAddressException {
         Optional<AddressEntity> addressEntity = addressRepository.findByAddressId(addressId).stream()
                 .filter(entity -> entity.getAddressId() == (addressId))
                 .findFirst();
         if( !addressEntity.isPresent()){
-            throw new Exception("Unknown address");
+            throw new UnknownAddressException("Address unknown");
         }
         return addressEntity.get();
     }
 
-    protected StoreEntity queryStore(int storeId) throws Exception {
+    protected StoreEntity queryStore(int storeId) throws UnknownStoreException {
         Optional<StoreEntity> storeEntity = storeRepository.findByStoreId(storeId).stream()
                 .filter(entity -> entity.getStoreId() == (storeId))
                 .findFirst();
         if( !storeEntity.isPresent()){
-            throw new Exception("Unknown store");
+            throw new UnknownStoreException("Store unknown");
         }
         return storeEntity.get();
     }

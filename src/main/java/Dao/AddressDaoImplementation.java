@@ -5,6 +5,8 @@ import Dao.Entity.CityEntity;
 import Dao.Repository.AddressRepository;
 import Dao.Repository.CityRepository;
 import Model.Address;
+import Exception.UnknownAddressException;
+import Exception.UnknownCityException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -37,7 +39,7 @@ public class AddressDaoImplementation implements AddressDao{
     }
 
     @Override
-    public void createAddress(Address address) throws Exception {
+    public void createAddress(Address address) throws UnknownCityException {
         AddressEntity addressEntity;
 
         addressEntity = AddressEntity.builder()
@@ -60,7 +62,7 @@ public class AddressDaoImplementation implements AddressDao{
     }
 
     @Override
-    public void updateFirstMatch(Address address, Address updatedAddress) throws Exception {
+    public void updateFirstMatch(Address address, Address updatedAddress) throws UnknownAddressException, UnknownCityException {
         Optional<AddressEntity> addressEntity = addressRepository.findByAddressAndAddress2AndDistrictAndCityAndPostalCodeAndPhone(
                 address.getAddress(),
                 address.getAddress2(),
@@ -72,7 +74,7 @@ public class AddressDaoImplementation implements AddressDao{
                 .findFirst();
 
         if(!addressEntity.isPresent()){
-            throw new Exception("Unknown Address: "+ address.toString());
+            throw new UnknownAddressException(address, "Address unknown");
         }
 
         addressEntity.get().setAddress(updatedAddress.getAddress());
@@ -92,7 +94,7 @@ public class AddressDaoImplementation implements AddressDao{
     }
 
     @Override
-    public void deleteAddress(Address address) throws Exception {
+    public void deleteAddress(Address address) throws UnknownAddressException, UnknownCityException {
         Optional<AddressEntity> addressEntity = addressRepository.findByAddressAndAddress2AndDistrictAndCityAndPostalCodeAndPhone(
                 address.getAddress(),
                 address.getAddress2(),
@@ -104,7 +106,7 @@ public class AddressDaoImplementation implements AddressDao{
                 .findFirst();
 
         if(!addressEntity.isPresent()){
-            throw new Exception("Unknown Address: " +address.toString());
+            throw new UnknownAddressException(address, "Address unknown");
         }
 
         try{
@@ -115,12 +117,12 @@ public class AddressDaoImplementation implements AddressDao{
         }
     }
 
-    protected CityEntity queryCity(int cityId) throws Exception {
+    protected CityEntity queryCity(int cityId) throws UnknownCityException {
         Optional<CityEntity> cityEntity = cityRepository.findByCityId(cityId).stream()
                 .filter(entity -> entity.getCityId() == (cityId))
                 .findFirst();
         if( !cityEntity.isPresent()){
-            throw new Exception("Unknown city");
+            throw new UnknownCityException("There is no city, with ID: "+cityId);
         }
         return cityEntity.get();
     }

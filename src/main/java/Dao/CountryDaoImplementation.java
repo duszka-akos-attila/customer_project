@@ -3,6 +3,8 @@ package Dao;
 import Dao.Entity.CountryEntity;
 import Dao.Repository.CountryRepository;
 import Model.Country;
+import Exception.UnknownCountryException;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -55,7 +57,7 @@ public class CountryDaoImplementation implements CountryDao{
                 .findFirst();
 
         if(!countryEntity.isPresent()){
-            throw new Exception("Unknown Country: "+ country.toString());
+            throw new UnknownCountryException(country, "Country unknown");
         }
 
         countryEntity.get().setCountry(updatedCountry.getCountry());
@@ -78,7 +80,7 @@ public class CountryDaoImplementation implements CountryDao{
                 .findFirst();
 
         if(!countryEntity.isPresent()){
-            throw new Exception("Unknown country: " +country.toString());
+            throw new UnknownCountryException(country, "Country unknown");
         }
 
         try{

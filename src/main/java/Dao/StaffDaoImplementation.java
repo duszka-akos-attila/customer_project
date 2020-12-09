@@ -7,6 +7,9 @@ import Dao.Repository.AddressRepository;
 import Dao.Repository.StaffRepository;
 import Dao.Repository.StoreRepository;
 import Model.Staff;
+import Exception.UnknownAddressException;
+import Exception.UnknownStaffException;
+import Exception.UnknownStoreException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -44,7 +47,7 @@ public class StaffDaoImplementation implements StaffDao{
     }
 
     @Override
-    public void createStaff(Staff staff) throws Exception {
+    public void createStaff(Staff staff) throws UnknownAddressException, UnknownStoreException {
         StaffEntity staffEntity;
 
         staffEntity = StaffEntity.builder()
@@ -70,7 +73,7 @@ public class StaffDaoImplementation implements StaffDao{
     }
 
     @Override
-    public void updateFirstMatch(Staff staff, Staff updatedStaff) throws Exception {
+    public void updateFirstMatch(Staff staff, Staff updatedStaff) throws UnknownStaffException, UnknownAddressException, UnknownStoreException {
         Optional<StaffEntity> staffEntity = staffRepository.findByFirstNameAndLastNameAndAddressAndEmailAndStoreAndActiveAndUserName(
                 staff.getFirstName(),
                 staff.getLastName(),
@@ -83,7 +86,7 @@ public class StaffDaoImplementation implements StaffDao{
                 .findFirst();
 
         if(!staffEntity.isPresent()){
-            throw new Exception("Unknown Staff : "+ staff.toString());
+            throw new UnknownStaffException(staff, "Staff unknown");
         }
 
         staffEntity.get().setFirstName(updatedStaff.getFirstName());
@@ -106,7 +109,7 @@ public class StaffDaoImplementation implements StaffDao{
     }
 
     @Override
-    public void deleteStaff(Staff staff) throws Exception {
+    public void deleteStaff(Staff staff) throws UnknownStaffException, UnknownAddressException, UnknownStoreException {
         Optional<StaffEntity> staffEntity = staffRepository.findByFirstNameAndLastNameAndAddressAndEmailAndStoreAndActiveAndUserName(
                 staff.getFirstName(),
                 staff.getLastName(),
@@ -118,7 +121,7 @@ public class StaffDaoImplementation implements StaffDao{
                 .stream()
                 .findFirst();
         if(!staffEntity.isPresent()){
-            throw new Exception("Unknown Staff: " +staff.toString());
+            throw new UnknownStaffException(staff, "Staff unknown");
         }
 
         try{
@@ -129,22 +132,22 @@ public class StaffDaoImplementation implements StaffDao{
         }
     }
 
-    protected AddressEntity queryAddress(int addressId) throws Exception {
+    protected AddressEntity queryAddress(int addressId) throws UnknownAddressException {
         Optional<AddressEntity> addressEntity = addressRepository.findByAddressId(addressId).stream()
                 .filter(entity -> entity.getAddressId() == (addressId))
                 .findFirst();
         if( !addressEntity.isPresent()){
-            throw new Exception("Unknown address");
+            throw new UnknownAddressException("Address unknown");
         }
         return addressEntity.get();
     }
 
-    protected StoreEntity queryStore(int storeId) throws Exception {
+    protected StoreEntity queryStore(int storeId) throws UnknownStoreException {
         Optional<StoreEntity> storeEntity = storeRepository.findByStoreId(storeId).stream()
                 .filter(entity -> entity.getStoreId() == (storeId))
                 .findFirst();
         if( !storeEntity.isPresent()){
-            throw new Exception("Unknown store");
+            throw new UnknownStoreException("Store unknown");
         }
         return storeEntity.get();
     }
