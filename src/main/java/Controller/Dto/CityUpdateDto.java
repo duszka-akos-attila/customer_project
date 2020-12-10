@@ -11,6 +11,6 @@ import lombok.experimental.SuperBuilder;
 @NoArgsConstructor
 @AllArgsConstructor
 public class CityUpdateDto {
-    private String city;
-    private int countryId;
+    private String updatedCity;
+    private int updatedCountryId;
 }

@@ -11,6 +11,6 @@ import lombok.experimental.SuperBuilder;
 @NoArgsConstructor
 @AllArgsConstructor
 public class StoreUpdateDto {
-    private int managerStaffId;
-    private int addressId;
+    private int updatedManagerStaffId;
+    private int updatedAddressId;
 }

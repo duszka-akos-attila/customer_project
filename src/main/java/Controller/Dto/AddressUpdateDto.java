@@ -10,10 +10,10 @@ import lombok.experimental.SuperBuilder;
 @NoArgsConstructor
 @AllArgsConstructor
 public class AddressUpdateDto {
-    private String address;
-    private String address2;
-    private String district;
-    private int cityId;
-    private String postalCode;
-    private String phone;
+    private String updatedAddress;
+    private String updatedAddress2;
+    private String updatedDistrict;
+    private int updatedCityId;
+    private String updatedPostalCode;
+    private String updatedPhone;
 }

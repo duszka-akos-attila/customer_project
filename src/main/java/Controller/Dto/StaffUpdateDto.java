@@ -12,13 +12,13 @@ import java.sql.Blob;
 @NoArgsConstructor
 @AllArgsConstructor
 public class StaffUpdateDto {
-    private String firstName;
-    private String lastName;
-    private int addressId;
-    private Blob picture;
-    private String email;
-    private int storeId;
-    private int active;
-    private String username;
-    private String password;
+    private String updatedFirstName;
+    private String updatedLastName;
+    private int updatedAddressId;
+    private Blob updatedPicture;
+    private String updatedEmail;
+    private int updatedStoreId;
+    private int updatedActive;
+    private String updatedUsername;
+    private String updatedPassword;
 }
