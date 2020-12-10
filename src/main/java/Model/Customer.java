@@ -12,7 +12,6 @@ import java.sql.Timestamp;
 @Getter
 @EqualsAndHashCode
 public class Customer {
-    private int customerId;
     private int storeId;
     private String firstName;
     private String lastName;

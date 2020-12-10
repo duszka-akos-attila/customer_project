@@ -10,7 +10,6 @@ import java.sql.Timestamp;
 @Getter
 @EqualsAndHashCode
 public class Staff {
-    private int staffId;
     private String firstName;
     private String lastName;
     private int addressId;

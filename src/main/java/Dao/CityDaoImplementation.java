@@ -26,7 +26,6 @@ public class CityDaoImplementation implements CityDao{
     public Collection<City> readAll() {
         return StreamSupport.stream(cityRepository.findAll().spliterator(), false)
                 .map(entity -> new City(
-                        entity.getCityId(),
                         entity.getCity(),
                         entity.getCountryEntity().getCountryId(),
                         entity.getLastUpdate()
@@ -40,7 +39,6 @@ public class CityDaoImplementation implements CityDao{
         CityEntity cityEntity;
 
         cityEntity = CityEntity.builder()
-                .cityId(city.getCityId())
                 .city(city.getCity())
                 .countryEntity(queryCountry(city.getCountryId()))
                 .lastUpdate(city.getLastUpdate())

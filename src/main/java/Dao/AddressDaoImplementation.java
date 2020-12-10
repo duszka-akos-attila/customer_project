@@ -26,7 +26,6 @@ public class AddressDaoImplementation implements AddressDao{
     public Collection<Address> readAll() {
         return StreamSupport.stream(addressRepository.findAll().spliterator(),false)
                 .map(entity -> new Address(
-                        entity.getAddressId(),
                         entity.getAddress(),
                         entity.getAddress2(),
                         entity.getDistrict(),
@@ -43,7 +42,6 @@ public class AddressDaoImplementation implements AddressDao{
         AddressEntity addressEntity;
 
         addressEntity = AddressEntity.builder()
-                .addressId(address.getAddressId())
                 .address(address.getAddress())
                 .address2(address.getAddress2())
                 .district(address.getDistrict())

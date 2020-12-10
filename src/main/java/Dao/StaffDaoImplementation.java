@@ -30,7 +30,6 @@ public class StaffDaoImplementation implements StaffDao{
     public Collection<Staff> readAll() {
         return StreamSupport.stream(staffRepository.findAll().spliterator(),false)
                 .map(entity -> new Staff(
-                        entity.getStaffId(),
                         entity.getFirstName(),
                         entity.getLastName(),
                         entity.getAddressEntity().getAddressId(),
@@ -51,7 +50,6 @@ public class StaffDaoImplementation implements StaffDao{
         StaffEntity staffEntity;
 
         staffEntity = StaffEntity.builder()
-                .staffId(staff.getStaffId())
                 .firstName(staff.getFirstName())
                 .lastName(staff.getLastName())
                 .addressEntity(queryAddress(staff.getAddressId()))

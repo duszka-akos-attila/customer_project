@@ -30,7 +30,6 @@ public class CustomerDaoImplementation implements CustomerDao{
     public Collection<Customer> readAll() {
         return StreamSupport.stream(customerRepository.findAll().spliterator(),false)
                 .map(entity -> new Customer(
-                        entity.getCustomerId(),
                         entity.getStoreEntity().getStoreId(),
                         entity.getFirstName(),
                         entity.getLastName(),

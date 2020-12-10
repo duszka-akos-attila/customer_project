@@ -12,7 +12,6 @@ import java.sql.Timestamp;
 @Getter
 @EqualsAndHashCode
 public class Address {
-    private int addressId;
     private String address;
     private String address2;
     private String district;

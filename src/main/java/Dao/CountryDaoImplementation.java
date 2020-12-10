@@ -23,7 +23,6 @@ public class CountryDaoImplementation implements CountryDao{
     public Collection<Country> readAll() {
         return StreamSupport.stream(countryRepository.findAll().spliterator(), false)
                 .map(entity -> new Country(
-                        entity.getCountryId(),
                         entity.getCountry(),
                         entity.getLastUpdate()
                 ))
@@ -35,7 +34,6 @@ public class CountryDaoImplementation implements CountryDao{
         CountryEntity countryEntity;
 
         countryEntity = CountryEntity.builder()
-                .countryId(country.getCountryId())
                 .country(country.getCountry())
                 .lastUpdate(country.getLastUpdate())
                 .build();

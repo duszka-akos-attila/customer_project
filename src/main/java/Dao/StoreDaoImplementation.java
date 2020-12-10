@@ -30,7 +30,6 @@ public class StoreDaoImplementation implements StoreDao{
     public Collection<Store> readAll(){
         return StreamSupport.stream(storeRepository.findAll().spliterator(),false)
                 .map(entity -> new Store(
-                        entity.getStoreId(),
                         entity.getManagerStaffEntity().getStaffId(),
                         entity.getAddressEntity().getAddressId(),
                         entity.getLastUpdate()
@@ -43,7 +42,6 @@ public class StoreDaoImplementation implements StoreDao{
         StoreEntity storeEntity;
 
         storeEntity = StoreEntity.builder()
-                .storeId(store.getStoreId())
                 .managerStaffEntity(queryStaff(store.getManagerStaffId()))
                 .addressEntity(queryAddress(store.getAddressId()))
                 .lastUpdate(store.getLastUpdate())

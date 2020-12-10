@@ -12,7 +12,6 @@ import java.sql.Timestamp;
 @Getter
 @EqualsAndHashCode
 public class Country {
-    private int countryId;
     private String country;
     private Timestamp lastUpdate;
 }
