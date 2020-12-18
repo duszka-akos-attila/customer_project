@@ -6,10 +6,10 @@ import Application.Dao.Entity.StoreEntity;
 import Application.Dao.Repository.AddressRepository;
 import Application.Dao.Repository.StaffRepository;
 import Application.Dao.Repository.StoreRepository;
-import Application.Model.Store;
 import Application.Exception.UnknownAddressException;
 import Application.Exception.UnknownStaffException;
 import Application.Exception.UnknownStoreException;
+import Application.Model.Store;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -22,15 +22,15 @@ import java.util.stream.StreamSupport;
 
 @Service
 @RequiredArgsConstructor
-public class StoreDaoImplementation implements StoreDao{
+public class StoreDaoImplementation implements StoreDao {
 
     private final StoreRepository storeRepository;
     private final AddressRepository addressRepository;
     private final StaffRepository staffRepository;
 
     @Override
-    public Collection<Store> readAll(){
-        return StreamSupport.stream(storeRepository.findAll().spliterator(),false)
+    public Collection<Store> readAll() {
+        return StreamSupport.stream(storeRepository.findAll().spliterator(), false)
                 .map(entity -> new Store(
                         entity.getManagerStaffEntity().getFirstName(),
                         entity.getManagerStaffEntity().getLastName(),
@@ -44,16 +44,15 @@ public class StoreDaoImplementation implements StoreDao{
         StoreEntity storeEntity;
 
         storeEntity = StoreEntity.builder()
-                .managerStaffEntity(queryStaff(store.getManagerFirstName(),store.getManagerLastName()))
+                .managerStaffEntity(queryStaff(store.getManagerFirstName(), store.getManagerLastName()))
                 .addressEntity(queryAddress(store.getAddress()))
                 .lastUpdate(new Timestamp((new Date()).getTime()))
                 .build();
 
-        try{
+        try {
             storeRepository.save(storeEntity);
-        }
-        catch(Exception e){
-            System.out.println("ERROR: " +e.getMessage());
+        } catch (Exception e) {
+            System.out.println("ERROR: " + e.getMessage());
         }
     }
 
@@ -64,19 +63,18 @@ public class StoreDaoImplementation implements StoreDao{
                 .stream()
                 .findFirst();
 
-        if(!storeEntity.isPresent()){
+        if (!storeEntity.isPresent()) {
             throw new UnknownStoreException(store, "Store unknown");
         }
 
-        storeEntity.get().setManagerStaffEntity(queryStaff(updatedStore.getManagerFirstName(),updatedStore.getManagerLastName()));
+        storeEntity.get().setManagerStaffEntity(queryStaff(updatedStore.getManagerFirstName(), updatedStore.getManagerLastName()));
         storeEntity.get().setAddressEntity(queryAddress(updatedStore.getAddress()));
-        storeEntity.get().setLastUpdate(new Timestamp((new Date()).getTime()));;
+        storeEntity.get().setLastUpdate(new Timestamp((new Date()).getTime()));
 
-        try{
+        try {
             storeRepository.save(storeEntity.get());
-        }
-        catch(Exception e){
-            System.out.println("ERROR: " +e.getMessage());
+        } catch (Exception e) {
+            System.out.println("ERROR: " + e.getMessage());
         }
     }
 
@@ -87,15 +85,14 @@ public class StoreDaoImplementation implements StoreDao{
                 .stream()
                 .findFirst();
 
-        if(!storeEntity.isPresent()){
+        if (!storeEntity.isPresent()) {
             throw new UnknownStoreException(store, "Store unknown");
         }
 
-        try{
+        try {
             storeRepository.delete(storeEntity.get());
-        }
-        catch(Exception e){
-            System.out.println("ERROR:" +e.getMessage());
+        } catch (Exception e) {
+            System.out.println("ERROR:" + e.getMessage());
         }
     }
 
@@ -103,7 +100,7 @@ public class StoreDaoImplementation implements StoreDao{
         Optional<AddressEntity> addressEntity = addressRepository.findByAddress(address).stream()
                 .filter(entity -> entity.getAddress().equals(address))
                 .findFirst();
-        if( !addressEntity.isPresent()){
+        if (!addressEntity.isPresent()) {
             throw new UnknownAddressException("Address unknown");
         }
         return addressEntity.get();
@@ -114,7 +111,7 @@ public class StoreDaoImplementation implements StoreDao{
                 .filter(entity -> entity.getFirstName().equals(firstName))
                 .filter(entity -> entity.getLastName().equals(lastName))
                 .findFirst();
-        if( !staffEntity.isPresent()){
+        if (!staffEntity.isPresent()) {
             throw new UnknownStaffException("Staff unknown");
         }
         return staffEntity.get();

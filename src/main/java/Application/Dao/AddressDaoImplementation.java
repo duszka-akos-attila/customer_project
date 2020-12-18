@@ -6,10 +6,10 @@ import Application.Dao.Entity.CountryEntity;
 import Application.Dao.Repository.AddressRepository;
 import Application.Dao.Repository.CityRepository;
 import Application.Dao.Repository.CountryRepository;
+import Application.Exception.UnknownAddressException;
 import Application.Exception.UnknownCityException;
 import Application.Exception.UnknownCountryException;
 import Application.Model.Address;
-import Application.Exception.UnknownAddressException;
 import lombok.RequiredArgsConstructor;
 import org.locationtech.jts.geom.Coordinate;
 import org.locationtech.jts.geom.GeometryFactory;
@@ -24,7 +24,7 @@ import java.util.stream.StreamSupport;
 
 @Service
 @RequiredArgsConstructor
-public class AddressDaoImplementation implements AddressDao{
+public class AddressDaoImplementation implements AddressDao {
 
     private final AddressRepository addressRepository;
     private final CityRepository cityRepository;
@@ -32,7 +32,7 @@ public class AddressDaoImplementation implements AddressDao{
 
     @Override
     public Collection<Address> readAll() {
-        return StreamSupport.stream(addressRepository.findAll().spliterator(),false)
+        return StreamSupport.stream(addressRepository.findAll().spliterator(), false)
                 .map(entity -> new Address(
                         entity.getAddress(),
                         entity.getAddress2(),
@@ -61,11 +61,10 @@ public class AddressDaoImplementation implements AddressDao{
                 .lastUpdate(new Timestamp((new Date()).getTime()))
                 .build();
 
-        try{
+        try {
             addressRepository.save(addressEntity);
-        }
-        catch(Exception e){
-            System.out.println("ERROR: " +e.getMessage());
+        } catch (Exception e) {
+            System.out.println("ERROR: " + e.getMessage());
         }
     }
 
@@ -81,8 +80,8 @@ public class AddressDaoImplementation implements AddressDao{
                 .stream()
                 .findFirst();
 
-        if(!addressEntity.isPresent()){
-            throw new UnknownAddressException(address, "Address unknown: "+ address.toString());
+        if (!addressEntity.isPresent()) {
+            throw new UnknownAddressException(address, "Address unknown: " + address.toString());
         }
 
         addressEntity.get().setAddress(updatedAddress.getAddress());
@@ -93,11 +92,10 @@ public class AddressDaoImplementation implements AddressDao{
         addressEntity.get().setPhone(updatedAddress.getPhone());
         addressEntity.get().setLastUpdate(new Timestamp((new Date()).getTime()));
 
-        try{
+        try {
             addressRepository.save(addressEntity.get());
-        }
-        catch(Exception e){
-            System.out.println("ERROR: " +e.getMessage());
+        } catch (Exception e) {
+            System.out.println("ERROR: " + e.getMessage());
         }
     }
 
@@ -113,15 +111,14 @@ public class AddressDaoImplementation implements AddressDao{
                 .stream()
                 .findFirst();
 
-        if(!addressEntity.isPresent()){
+        if (!addressEntity.isPresent()) {
             throw new UnknownAddressException(address, "Address unknown");
         }
 
-        try{
+        try {
             addressRepository.delete(addressEntity.get());
-        }
-        catch(Exception e){
-            System.out.println("ERROR:" +e.getMessage());
+        } catch (Exception e) {
+            System.out.println("ERROR:" + e.getMessage());
         }
     }
 

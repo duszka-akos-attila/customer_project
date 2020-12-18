@@ -13,7 +13,7 @@ import org.mockito.Mock;
 import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
@@ -40,19 +40,19 @@ class StoreDaoImplementationTest {
                 .when(storeDaoImplementation).queryAddress(any());
 
         doReturn(StaffEntity.builder().firstName("firstname").lastName("lastname").build())
-                .when(storeDaoImplementation).queryStaff(any(),any());
+                .when(storeDaoImplementation).queryStaff(any(), any());
 
         storeDaoImplementation.createStore(getStore());
 
-        verify(storeRepository,times(1)).save(any());
+        verify(storeRepository, times(1)).save(any());
     }
 
     @Test
     public void createStoreWithUnknownStaff() throws UnknownStaffException, UnknownAddressException {
 
-        doThrow(UnknownStaffException.class).when(storeDaoImplementation).queryStaff(any(),any());
+        doThrow(UnknownStaffException.class).when(storeDaoImplementation).queryStaff(any(), any());
 
-        assertThrows(UnknownStaffException.class, ()->{
+        assertThrows(UnknownStaffException.class, () -> {
             storeDaoImplementation.createStore(getStore());
         });
     }
@@ -61,11 +61,11 @@ class StoreDaoImplementationTest {
     public void createStoreWithUnknownAddress() throws UnknownStaffException, UnknownAddressException {
 
         doReturn(StaffEntity.builder().firstName("firstname").lastName("lastname").build())
-                .when(storeDaoImplementation).queryStaff(any(),any());
+                .when(storeDaoImplementation).queryStaff(any(), any());
 
         doThrow(UnknownAddressException.class).when(storeDaoImplementation).queryAddress(any());
 
-        assertThrows(UnknownAddressException.class, ()->{
+        assertThrows(UnknownAddressException.class, () -> {
             storeDaoImplementation.createStore(getStore());
         });
     }

@@ -1,22 +1,22 @@
 package Application.Model;
 
-import lombok.*;
-
-import java.sql.Blob;
-import java.sql.Timestamp;
+import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.ToString;
 
 @AllArgsConstructor
 @ToString
 @Getter
 @EqualsAndHashCode
 public class Staff {
-    private String firstName;
-    private String lastName;
-    private String address;
+    private final String firstName;
+    private final String lastName;
+    private final String address;
     //private Blob picture;
-    private String email;
-    private String storeAddress;
-    private int active;
-    private String username;
-    private String password;
+    private final String email;
+    private final String storeAddress;
+    private final int active;
+    private final String username;
+    private final String password;
 }

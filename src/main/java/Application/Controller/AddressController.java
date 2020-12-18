@@ -2,16 +2,16 @@ package Application.Controller;
 
 import Application.Controller.Dto.AddressDto;
 import Application.Controller.Dto.AddressUpdateDto;
+import Application.Exception.UnknownAddressException;
+import Application.Exception.UnknownCityException;
+import Application.Exception.UnknownCountryException;
 import Application.Model.Address;
-import Application.Exception.*;
 import Application.Service.AddressService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.sql.Timestamp;
-import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.stream.Collectors;
 
@@ -21,10 +21,10 @@ public class AddressController {
     private final AddressService service;
 
     @GetMapping("/Address")
-    public Collection<AddressDto> listAddresses(){
-         return service.getAllAddresses()
+    public Collection<AddressDto> listAddresses() {
+        return service.getAllAddresses()
                 .stream()
-                .map( model -> AddressDto.builder()
+                .map(model -> AddressDto.builder()
                         .address(model.getAddress())
                         .address2(model.getAddress2())
                         .district(model.getDistrict())
@@ -37,8 +37,8 @@ public class AddressController {
     }
 
     @PostMapping("/Address")
-    public void recordAddress(@RequestBody AddressDto addressDto){
-        try{
+    public void recordAddress(@RequestBody AddressDto addressDto) {
+        try {
             service.recordAddress(new Address(
                     addressDto.getAddress(),
                     addressDto.getAddress2(),
@@ -54,8 +54,8 @@ public class AddressController {
     }
 
     @DeleteMapping("/Address")
-    public void deleteFirstMatchingAddress(@RequestBody AddressDto addressDto){
-        try{
+    public void deleteFirstMatchingAddress(@RequestBody AddressDto addressDto) {
+        try {
             service.deleteAddress(new Address(
                     addressDto.getAddress(),
                     addressDto.getAddress2(),
@@ -65,14 +65,14 @@ public class AddressController {
                     addressDto.getPostalCode(),
                     addressDto.getPhone()
             ));
-        } catch(UnknownAddressException | UnknownCityException | UnknownCountryException e){
+        } catch (UnknownAddressException | UnknownCityException | UnknownCountryException e) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
         }
     }
 
     @PutMapping("/Address")
-    public void updateFirstMatchingAddress(@RequestBody AddressUpdateDto addressUpdateDto){
-        try{
+    public void updateFirstMatchingAddress(@RequestBody AddressUpdateDto addressUpdateDto) {
+        try {
             service.updateFirstMatch(
                     new Address(
                             addressUpdateDto.getAddress(),
@@ -93,7 +93,7 @@ public class AddressController {
                             addressUpdateDto.getUpdatedPhone()
                     )
             );
-        } catch(UnknownAddressException | UnknownCityException | UnknownCountryException e){
+        } catch (UnknownAddressException | UnknownCityException | UnknownCountryException e) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
         }
     }

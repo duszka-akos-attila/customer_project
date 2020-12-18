@@ -1,9 +1,9 @@
 package Application.Service;
 
 import Application.Dao.CityDao;
-import Application.Model.City;
-import Application.Exception.UnknownCountryException;
 import Application.Exception.UnknownCityException;
+import Application.Exception.UnknownCountryException;
+import Application.Model.City;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -11,7 +11,7 @@ import java.util.Collection;
 
 @Service
 @RequiredArgsConstructor
-public class CityServiceImplementation implements CityService{
+public class CityServiceImplementation implements CityService {
 
     private final CityDao cityDao;
 

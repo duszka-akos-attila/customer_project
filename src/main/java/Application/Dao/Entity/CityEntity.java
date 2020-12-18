@@ -16,7 +16,7 @@ public class CityEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name="city_id")
+    @Column(name = "city_id")
     private int cityId;
 
     @Column(name = "city")

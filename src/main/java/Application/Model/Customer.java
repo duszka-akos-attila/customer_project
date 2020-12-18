@@ -5,17 +5,15 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.ToString;
 
-import java.sql.Timestamp;
-
 @AllArgsConstructor
 @ToString
 @Getter
 @EqualsAndHashCode
 public class Customer {
-    private String storeAddress;
-    private String firstName;
-    private String lastName;
-    private String email;
-    private String address;
-    private int active;
+    private final String storeAddress;
+    private final String firstName;
+    private final String lastName;
+    private final String email;
+    private final String address;
+    private final int active;
 }

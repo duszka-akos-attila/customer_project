@@ -2,16 +2,14 @@ package Application.Controller;
 
 import Application.Controller.Dto.CountryDto;
 import Application.Controller.Dto.CountryUpdateDto;
-import Application.Model.Country;
 import Application.Exception.UnknownCountryException;
+import Application.Model.Country;
 import Application.Service.CountryService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.sql.Timestamp;
-import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.stream.Collectors;
 
@@ -21,36 +19,36 @@ public class CountryController {
     private final CountryService service;
 
     @GetMapping("/Country")
-    public Collection<CountryDto> listCountries(){
+    public Collection<CountryDto> listCountries() {
         return service.getAllCountries()
                 .stream()
-                .map( model -> CountryDto.builder()
+                .map(model -> CountryDto.builder()
                         .country(model.getCountry())
                         .build())
                 .collect(Collectors.toList());
     }
 
     @PostMapping("/Country")
-    public void recordCountry(@RequestBody CountryDto countryDto){
-            service.recordCountry(new Country(
-                    countryDto.getCountry()
-            ));
+    public void recordCountry(@RequestBody CountryDto countryDto) {
+        service.recordCountry(new Country(
+                countryDto.getCountry()
+        ));
     }
 
     @DeleteMapping("/Country")
-    public void deleteFirstMatchingCountry(@RequestBody CountryDto countryDto){
-        try{
+    public void deleteFirstMatchingCountry(@RequestBody CountryDto countryDto) {
+        try {
             service.deleteCountry(new Country(
                     countryDto.getCountry()
             ));
-        } catch(UnknownCountryException e){
+        } catch (UnknownCountryException e) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
         }
     }
 
     @PutMapping("/Country")
-    public void updateFirstMatchingCountry(@RequestBody CountryUpdateDto countryUpdateDto){
-        try{
+    public void updateFirstMatchingCountry(@RequestBody CountryUpdateDto countryUpdateDto) {
+        try {
             service.updateFirstMatch(
                     new Country(
                             countryUpdateDto.getCountry()
@@ -59,7 +57,7 @@ public class CountryController {
                             countryUpdateDto.getUpdatedCountry()
                     )
             );
-        } catch( UnknownCountryException e){
+        } catch (UnknownCountryException e) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
         }
     }

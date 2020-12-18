@@ -1,10 +1,10 @@
 package Application.Service;
 
 import Application.Dao.AddressDao;
+import Application.Exception.UnknownAddressException;
+import Application.Exception.UnknownCityException;
 import Application.Exception.UnknownCountryException;
 import Application.Model.Address;
-import Application.Exception.UnknownCityException;
-import Application.Exception.UnknownAddressException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -12,7 +12,7 @@ import java.util.Collection;
 
 @Service
 @RequiredArgsConstructor
-public class AddressServiceImplementation implements AddressService{
+public class AddressServiceImplementation implements AddressService {
 
     private final AddressDao addressDao;
 

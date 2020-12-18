@@ -1,11 +1,8 @@
 package Application.Dao;
 
-import Application.Dao.Entity.AddressEntity;
 import Application.Dao.Entity.CountryEntity;
 import Application.Dao.Repository.CityRepository;
-import Application.Dao.Repository.CustomerRepository;
 import Application.Exception.UnknownCountryException;
-import Application.Exception.UnknownStoreException;
 import Application.Model.City;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -14,7 +11,7 @@ import org.mockito.Mock;
 import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
@@ -45,7 +42,7 @@ class CityDaoImplementationTest {
 
         cityDaoImplementation.createCity(getCity());
 
-        verify(cityRepository,times(1)).save(any());
+        verify(cityRepository, times(1)).save(any());
     }
 
     @Test
@@ -53,15 +50,15 @@ class CityDaoImplementationTest {
 
         doThrow(UnknownCountryException.class).when(cityDaoImplementation).queryCountry(any());
 
-        assertThrows(UnknownCountryException.class, ()->{
+        assertThrows(UnknownCountryException.class, () -> {
             cityDaoImplementation.createCity(getCity());
         });
     }
 
-    private City getCity(){
+    private City getCity() {
         return new City(
-          "city",
-          "country"
+                "city",
+                "country"
         );
     }
 }

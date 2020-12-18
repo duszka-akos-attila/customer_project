@@ -16,12 +16,12 @@ public class CountryEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name="country_id")
+    @Column(name = "country_id")
     private int countryId;
 
-    @Column(name="country")
+    @Column(name = "country")
     private String country;
 
-    @Column(name="last_update")
+    @Column(name = "last_update")
     private Timestamp lastUpdate;
 }

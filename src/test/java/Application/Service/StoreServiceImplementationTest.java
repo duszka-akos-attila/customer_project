@@ -1,8 +1,5 @@
 package Application.Service;
 
-import Application.Dao.Entity.AddressEntity;
-import Application.Dao.Entity.StaffEntity;
-import Application.Dao.Entity.StoreEntity;
 import Application.Dao.StoreDao;
 import Application.Exception.UnknownAddressException;
 import Application.Exception.UnknownStaffException;
@@ -19,7 +16,7 @@ import java.util.Collection;
 
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -43,7 +40,7 @@ class StoreServiceImplementationTest {
 
         doThrow(UnknownStaffException.class).when(storeDao).createStore(any());
 
-        assertThrows(UnknownStaffException.class, ()->{
+        assertThrows(UnknownStaffException.class, () -> {
             storeServiceImplementation.recordStore(getStore());
         });
     }
@@ -53,7 +50,7 @@ class StoreServiceImplementationTest {
 
         doThrow(UnknownAddressException.class).when(storeDao).createStore(any());
 
-        assertThrows(UnknownAddressException.class, ()->{
+        assertThrows(UnknownAddressException.class, () -> {
             storeServiceImplementation.recordStore(getStore());
         });
     }
@@ -71,7 +68,7 @@ class StoreServiceImplementationTest {
 
         storeServiceImplementation.updateFirstMatch(getStore(), getUpdatedStore());
 
-        verify(storeDao, times(1)).updateFirstMatch(getStore(), getUpdatedStore() );
+        verify(storeDao, times(1)).updateFirstMatch(getStore(), getUpdatedStore());
     }
 
     @Test
@@ -79,7 +76,7 @@ class StoreServiceImplementationTest {
 
         doThrow(UnknownAddressException.class).when(storeDao).updateFirstMatch(any(), any());
 
-        assertThrows(UnknownAddressException.class, ()->{
+        assertThrows(UnknownAddressException.class, () -> {
             storeServiceImplementation.updateFirstMatch(getStore(), getUpdatedStore());
         });
 
@@ -90,7 +87,7 @@ class StoreServiceImplementationTest {
 
         doThrow(UnknownStoreException.class).when(storeDao).updateFirstMatch(any(), any());
 
-        assertThrows(UnknownStoreException.class, ()->{
+        assertThrows(UnknownStoreException.class, () -> {
             storeServiceImplementation.updateFirstMatch(getStore(), getUpdatedStore());
         });
 
@@ -101,7 +98,7 @@ class StoreServiceImplementationTest {
 
         doThrow(UnknownStaffException.class).when(storeDao).updateFirstMatch(any(), any());
 
-        assertThrows(UnknownStaffException.class, ()->{
+        assertThrows(UnknownStaffException.class, () -> {
             storeServiceImplementation.updateFirstMatch(getStore(), getUpdatedStore());
         });
 
@@ -121,7 +118,7 @@ class StoreServiceImplementationTest {
 
         doThrow(UnknownAddressException.class).when(storeDao).deleteStore(any());
 
-        assertThrows(UnknownAddressException.class, ()->{
+        assertThrows(UnknownAddressException.class, () -> {
             storeServiceImplementation.deleteStore(getStore());
         });
 
@@ -132,7 +129,7 @@ class StoreServiceImplementationTest {
 
         doThrow(UnknownStoreException.class).when(storeDao).deleteStore(any());
 
-        assertThrows(UnknownStoreException.class, ()->{
+        assertThrows(UnknownStoreException.class, () -> {
             storeServiceImplementation.deleteStore(getStore());
         });
 
@@ -143,7 +140,7 @@ class StoreServiceImplementationTest {
 
         doThrow(UnknownStaffException.class).when(storeDao).deleteStore(any());
 
-        assertThrows(UnknownStaffException.class, ()->{
+        assertThrows(UnknownStaffException.class, () -> {
             storeServiceImplementation.deleteStore(getStore());
         });
 

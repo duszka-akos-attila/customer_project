@@ -10,7 +10,7 @@ import lombok.experimental.SuperBuilder;
 @SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
-public class CityUpdateDto extends CityDto{
+public class CityUpdateDto extends CityDto {
     private String updatedCity;
     private String updatedCountry;
 }

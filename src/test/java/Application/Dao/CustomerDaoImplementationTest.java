@@ -6,7 +6,6 @@ import Application.Dao.Repository.CustomerRepository;
 import Application.Exception.UnknownAddressException;
 import Application.Exception.UnknownStoreException;
 import Application.Model.Customer;
-import Application.Model.Staff;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -14,10 +13,9 @@ import org.mockito.Mock;
 import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
-import static org.mockito.Mockito.doReturn;
 
 @ExtendWith(MockitoExtension.class)
 class CustomerDaoImplementationTest {
@@ -49,7 +47,7 @@ class CustomerDaoImplementationTest {
 
         customerDaoImplementation.createCustomer(getCustomer());
 
-        verify(customerRepository,times(1)).save(any());
+        verify(customerRepository, times(1)).save(any());
     }
 
     @Test
@@ -57,7 +55,7 @@ class CustomerDaoImplementationTest {
 
         doThrow(UnknownStoreException.class).when(customerDaoImplementation).queryStore(any());
 
-        assertThrows(UnknownStoreException.class, ()->{
+        assertThrows(UnknownStoreException.class, () -> {
             customerDaoImplementation.createCustomer(getCustomer());
         });
 
@@ -71,12 +69,12 @@ class CustomerDaoImplementationTest {
 
         doThrow(UnknownAddressException.class).when(customerDaoImplementation).queryAddress(any());
 
-        assertThrows(UnknownAddressException.class, ()->{
+        assertThrows(UnknownAddressException.class, () -> {
             customerDaoImplementation.createCustomer(getCustomer());
         });
     }
 
-    private Customer getCustomer(){
+    private Customer getCustomer() {
         return new Customer(
                 "storeAddress",
                 "firstName",

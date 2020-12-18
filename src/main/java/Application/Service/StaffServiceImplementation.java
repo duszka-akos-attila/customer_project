@@ -1,11 +1,10 @@
 package Application.Service;
 
 import Application.Dao.StaffDao;
-import Application.Model.Staff;
 import Application.Exception.UnknownAddressException;
-import Application.Exception.UnknownStoreException;
 import Application.Exception.UnknownStaffException;
-
+import Application.Exception.UnknownStoreException;
+import Application.Model.Staff;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -13,7 +12,7 @@ import java.util.Collection;
 
 @Service
 @RequiredArgsConstructor
-public class StaffServiceImplementation implements StaffService{
+public class StaffServiceImplementation implements StaffService {
 
     private final StaffDao staffDao;
 

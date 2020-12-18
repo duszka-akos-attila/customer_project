@@ -17,7 +17,7 @@ public class StaffEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name="staff_id")
+    @Column(name = "staff_id")
     private int staffId;
 
     @Column(name = "first_name")

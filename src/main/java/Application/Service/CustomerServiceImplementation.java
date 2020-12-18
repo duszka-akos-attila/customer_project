@@ -1,10 +1,10 @@
 package Application.Service;
 
 import Application.Dao.CustomerDao;
-import Application.Model.Customer;
 import Application.Exception.UnknownAddressException;
-import Application.Exception.UnknownStoreException;
 import Application.Exception.UnknownCustomerException;
+import Application.Exception.UnknownStoreException;
+import Application.Model.Customer;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -12,7 +12,7 @@ import java.util.Collection;
 
 @Service
 @RequiredArgsConstructor
-public class CustomerServiceImplementation implements CustomerService{
+public class CustomerServiceImplementation implements CustomerService {
 
     private final CustomerDao customerDao;
 

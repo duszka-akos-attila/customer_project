@@ -1,9 +1,9 @@
 package Application.Dao;
 
-import Application.Model.Customer;
 import Application.Exception.UnknownAddressException;
 import Application.Exception.UnknownCustomerException;
 import Application.Exception.UnknownStoreException;
+import Application.Model.Customer;
 
 import java.util.Collection;
 

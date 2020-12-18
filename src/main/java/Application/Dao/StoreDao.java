@@ -1,9 +1,9 @@
 package Application.Dao;
 
-import Application.Model.Store;
 import Application.Exception.UnknownAddressException;
 import Application.Exception.UnknownStaffException;
 import Application.Exception.UnknownStoreException;
+import Application.Model.Store;
 
 import java.util.Collection;
 

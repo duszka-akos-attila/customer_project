@@ -4,9 +4,9 @@ import Application.Dao.Entity.CityEntity;
 import Application.Dao.Entity.CountryEntity;
 import Application.Dao.Repository.CityRepository;
 import Application.Dao.Repository.CountryRepository;
-import Application.Model.City;
 import Application.Exception.UnknownCityException;
 import Application.Exception.UnknownCountryException;
+import Application.Model.City;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -19,7 +19,7 @@ import java.util.stream.StreamSupport;
 
 @Service
 @RequiredArgsConstructor
-public class CityDaoImplementation implements CityDao{
+public class CityDaoImplementation implements CityDao {
 
     private final CityRepository cityRepository;
     private final CountryRepository countryRepository;
@@ -31,7 +31,7 @@ public class CityDaoImplementation implements CityDao{
                         entity.getCity(),
                         entity.getCountryEntity().getCountry()
                 )).
-                collect(Collectors.toList());
+                        collect(Collectors.toList());
     }
 
     @Override
@@ -45,24 +45,23 @@ public class CityDaoImplementation implements CityDao{
                 .lastUpdate(new Timestamp((new Date()).getTime()))
                 .build();
 
-        try{
+        try {
             cityRepository.save(cityEntity);
-        }
-        catch(Exception e){
-            System.out.println("ERROR: " +e.getMessage());
+        } catch (Exception e) {
+            System.out.println("ERROR: " + e.getMessage());
         }
 
     }
 
     @Override
-    public void updateFirstMatch(City city, City updatedCity) throws UnknownCityException,UnknownCountryException {
+    public void updateFirstMatch(City city, City updatedCity) throws UnknownCityException, UnknownCountryException {
         Optional<CityEntity> cityEntity = cityRepository.findByCityAndCountryEntity(
                 city.getCity(),
                 queryCountry(city.getCountry()))
                 .stream()
                 .findFirst();
 
-        if(!cityEntity.isPresent()){
+        if (!cityEntity.isPresent()) {
             throw new UnknownCityException(city, "City unknown");
         }
 
@@ -70,31 +69,29 @@ public class CityDaoImplementation implements CityDao{
         cityEntity.get().setCountryEntity(queryCountry(updatedCity.getCountry()));
         cityEntity.get().setLastUpdate(new Timestamp((new Date()).getTime()));
 
-        try{
+        try {
             cityRepository.save(cityEntity.get());
-        }
-        catch(Exception e){
-            System.out.println("ERROR: " +e.getMessage());
+        } catch (Exception e) {
+            System.out.println("ERROR: " + e.getMessage());
         }
     }
 
     @Override
-    public void deleteCity(City city) throws UnknownCityException, UnknownCountryException{
+    public void deleteCity(City city) throws UnknownCityException, UnknownCountryException {
         Optional<CityEntity> cityEntity = cityRepository.findByCityAndCountryEntity(
                 city.getCity(),
                 queryCountry(city.getCountry()))
                 .stream()
                 .findFirst();
 
-        if(!cityEntity.isPresent()){
+        if (!cityEntity.isPresent()) {
             throw new UnknownCityException(city, "City unknown");
         }
 
-        try{
+        try {
             cityRepository.delete(cityEntity.get());
-        }
-        catch(Exception e){
-            System.out.println("ERROR:" +e.getMessage());
+        } catch (Exception e) {
+            System.out.println("ERROR:" + e.getMessage());
         }
     }
 
@@ -102,8 +99,8 @@ public class CityDaoImplementation implements CityDao{
         Optional<CountryEntity> countryEntity = countryRepository.findByCountry(country).stream()
                 .filter(entity -> entity.getCountry().equals(country))
                 .findFirst();
-        if( !countryEntity.isPresent()){
-            throw new UnknownCountryException("Country unknown"+ country);
+        if (!countryEntity.isPresent()) {
+            throw new UnknownCountryException("Country unknown" + country);
         }
         return countryEntity.get();
     }

@@ -1,8 +1,8 @@
 package Application.Dao;
 
-import Application.Model.City;
 import Application.Exception.UnknownCityException;
 import Application.Exception.UnknownCountryException;
+import Application.Model.City;
 
 import java.util.Collection;
 

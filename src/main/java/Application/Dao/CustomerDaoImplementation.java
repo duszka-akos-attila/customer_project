@@ -1,14 +1,15 @@
 package Application.Dao;
 
-import Application.Dao.Entity.*;
+import Application.Dao.Entity.AddressEntity;
+import Application.Dao.Entity.CustomerEntity;
+import Application.Dao.Entity.StoreEntity;
 import Application.Dao.Repository.AddressRepository;
 import Application.Dao.Repository.CustomerRepository;
 import Application.Dao.Repository.StoreRepository;
-import Application.Exception.UnknownCountryException;
-import Application.Model.Customer;
 import Application.Exception.UnknownAddressException;
 import Application.Exception.UnknownCustomerException;
 import Application.Exception.UnknownStoreException;
+import Application.Model.Customer;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -21,7 +22,7 @@ import java.util.stream.StreamSupport;
 
 @Service
 @RequiredArgsConstructor
-public class CustomerDaoImplementation implements CustomerDao{
+public class CustomerDaoImplementation implements CustomerDao {
 
     private final CustomerRepository customerRepository;
     private final StoreRepository storeRepository;
@@ -29,7 +30,7 @@ public class CustomerDaoImplementation implements CustomerDao{
 
     @Override
     public Collection<Customer> readAll() {
-        return StreamSupport.stream(customerRepository.findAll().spliterator(),false)
+        return StreamSupport.stream(customerRepository.findAll().spliterator(), false)
                 .map(entity -> new Customer(
                         entity.getStoreEntity().getAddressEntity().getAddress(),
                         entity.getFirstName(),
@@ -56,11 +57,10 @@ public class CustomerDaoImplementation implements CustomerDao{
                 .lastUpdate(new Timestamp((new Date()).getTime()))
                 .build();
 
-        try{
+        try {
             customerRepository.save(customerEntity);
-        }
-        catch(Exception e){
-            System.out.println("ERROR: " +e.getMessage());
+        } catch (Exception e) {
+            System.out.println("ERROR: " + e.getMessage());
         }
     }
 
@@ -76,7 +76,7 @@ public class CustomerDaoImplementation implements CustomerDao{
                 .stream()
                 .findFirst();
 
-        if(!customerEntity.isPresent()){
+        if (!customerEntity.isPresent()) {
             throw new UnknownCustomerException(customer, "Customer unknown");
         }
 
@@ -88,11 +88,10 @@ public class CustomerDaoImplementation implements CustomerDao{
         customerEntity.get().setActive(updatedCustomer.getActive());
         customerEntity.get().setLastUpdate(new Timestamp((new Date()).getTime()));
 
-        try{
+        try {
             customerRepository.save(customerEntity.get());
-        }
-        catch(Exception e){
-            System.out.println("ERROR: " +e.getMessage());
+        } catch (Exception e) {
+            System.out.println("ERROR: " + e.getMessage());
         }
     }
 
@@ -108,15 +107,14 @@ public class CustomerDaoImplementation implements CustomerDao{
                 .stream()
                 .findFirst();
 
-        if(!customerEntity.isPresent()){
+        if (!customerEntity.isPresent()) {
             throw new UnknownCustomerException(customer, "Customer unknown");
         }
 
-        try{
+        try {
             customerRepository.delete(customerEntity.get());
-        }
-        catch(Exception e){
-            System.out.println("ERROR:" +e.getMessage());
+        } catch (Exception e) {
+            System.out.println("ERROR:" + e.getMessage());
         }
     }
 
@@ -124,7 +122,7 @@ public class CustomerDaoImplementation implements CustomerDao{
         Optional<AddressEntity> addressEntity = addressRepository.findByAddress(address).stream()
                 .filter(entity -> entity.getAddress().equals(address))
                 .findFirst();
-        if( !addressEntity.isPresent()){
+        if (!addressEntity.isPresent()) {
             throw new UnknownAddressException("Address unknown");
         }
         return addressEntity.get();
@@ -134,7 +132,7 @@ public class CustomerDaoImplementation implements CustomerDao{
         Optional<StoreEntity> storeEntity = storeRepository.findByAddressEntity_Address(address).stream()
                 .filter(entity -> entity.getAddressEntity().getAddress().equals(address))
                 .findFirst();
-        if( !storeEntity.isPresent()){
+        if (!storeEntity.isPresent()) {
             throw new UnknownStoreException("Store unknown");
         }
         return storeEntity.get();

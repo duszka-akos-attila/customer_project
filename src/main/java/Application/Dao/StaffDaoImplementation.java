@@ -6,10 +6,10 @@ import Application.Dao.Entity.StoreEntity;
 import Application.Dao.Repository.AddressRepository;
 import Application.Dao.Repository.StaffRepository;
 import Application.Dao.Repository.StoreRepository;
-import Application.Model.Staff;
 import Application.Exception.UnknownAddressException;
 import Application.Exception.UnknownStaffException;
 import Application.Exception.UnknownStoreException;
+import Application.Model.Staff;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -22,7 +22,7 @@ import java.util.stream.StreamSupport;
 
 @Service
 @RequiredArgsConstructor
-public class StaffDaoImplementation implements StaffDao{
+public class StaffDaoImplementation implements StaffDao {
 
     private final StoreRepository storeRepository;
     private final AddressRepository addressRepository;
@@ -30,7 +30,7 @@ public class StaffDaoImplementation implements StaffDao{
 
     @Override
     public Collection<Staff> readAll() {
-        return StreamSupport.stream(staffRepository.findAll().spliterator(),false)
+        return StreamSupport.stream(staffRepository.findAll().spliterator(), false)
                 .map(entity -> new Staff(
                         entity.getFirstName(),
                         entity.getLastName(),
@@ -63,11 +63,10 @@ public class StaffDaoImplementation implements StaffDao{
                 .lastUpdate(new Timestamp((new Date()).getTime()))
                 .build();
 
-        try{
+        try {
             staffRepository.save(staffEntity);
-        }
-        catch(Exception e){
-            System.out.println("ERROR: " +e.getMessage());
+        } catch (Exception e) {
+            System.out.println("ERROR: " + e.getMessage());
         }
     }
 
@@ -84,7 +83,7 @@ public class StaffDaoImplementation implements StaffDao{
                 .stream()
                 .findFirst();
 
-        if(!staffEntity.isPresent()){
+        if (!staffEntity.isPresent()) {
             throw new UnknownStaffException(staff, "Staff unknown");
         }
 
@@ -99,11 +98,10 @@ public class StaffDaoImplementation implements StaffDao{
         staffEntity.get().setPassword(updatedStaff.getPassword());
         staffEntity.get().setLastUpdate(new Timestamp((new Date()).getTime()));
 
-        try{
+        try {
             staffRepository.save(staffEntity.get());
-        }
-        catch(Exception e){
-            System.out.println("ERROR: " +e.getMessage());
+        } catch (Exception e) {
+            System.out.println("ERROR: " + e.getMessage());
         }
     }
 
@@ -119,15 +117,14 @@ public class StaffDaoImplementation implements StaffDao{
                 staff.getUsername())
                 .stream()
                 .findFirst();
-        if(!staffEntity.isPresent()){
+        if (!staffEntity.isPresent()) {
             throw new UnknownStaffException(staff, "Staff unknown");
         }
 
-        try{
+        try {
             staffRepository.delete(staffEntity.get());
-        }
-        catch(Exception e){
-            System.out.println("ERROR:" +e.getMessage());
+        } catch (Exception e) {
+            System.out.println("ERROR:" + e.getMessage());
         }
     }
 
@@ -135,7 +132,7 @@ public class StaffDaoImplementation implements StaffDao{
         Optional<AddressEntity> addressEntity = addressRepository.findByAddress(address).stream()
                 .filter(entity -> entity.getAddress().equals(address))
                 .findFirst();
-        if( !addressEntity.isPresent()){
+        if (!addressEntity.isPresent()) {
             throw new UnknownAddressException("Address unknown");
         }
         return addressEntity.get();
@@ -145,7 +142,7 @@ public class StaffDaoImplementation implements StaffDao{
         Optional<StoreEntity> storeEntity = storeRepository.findByAddressEntity_Address(address).stream()
                 .filter(entity -> entity.getAddressEntity().getAddress().equals(address))
                 .findFirst();
-        if( !storeEntity.isPresent()){
+        if (!storeEntity.isPresent()) {
             throw new UnknownStoreException("Store unknown");
         }
         return storeEntity.get();

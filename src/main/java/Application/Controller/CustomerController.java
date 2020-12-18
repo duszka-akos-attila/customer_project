@@ -1,11 +1,10 @@
 package Application.Controller;
 
-import Application.Controller.Dto.CityDto;
-import Application.Controller.Dto.CityUpdateDto;
 import Application.Controller.Dto.CustomerDto;
 import Application.Controller.Dto.CustomerUpdateDto;
-import Application.Exception.*;
-import Application.Model.City;
+import Application.Exception.UnknownAddressException;
+import Application.Exception.UnknownCustomerException;
+import Application.Exception.UnknownStoreException;
 import Application.Model.Customer;
 import Application.Service.CustomerService;
 import lombok.RequiredArgsConstructor;
@@ -13,7 +12,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.sql.Timestamp;
 import java.util.Collection;
 import java.util.stream.Collectors;
 
@@ -23,10 +21,10 @@ public class CustomerController {
     private final CustomerService service;
 
     @GetMapping("/Customer")
-    public Collection<CustomerDto> listCustomers(){
+    public Collection<CustomerDto> listCustomers() {
         return service.getAllCustomers()
                 .stream()
-                .map( model -> CustomerDto.builder()
+                .map(model -> CustomerDto.builder()
                         .storeAddress(model.getStoreAddress())
                         .firstName(model.getFirstName())
                         .lastName(model.getLastName())
@@ -38,8 +36,8 @@ public class CustomerController {
     }
 
     @PostMapping("/Customer")
-    public void recordCustomer(@RequestBody CustomerDto customerDto){
-        try{
+    public void recordCustomer(@RequestBody CustomerDto customerDto) {
+        try {
             service.recordCustomer(new Customer(
                     customerDto.getStoreAddress(),
                     customerDto.getFirstName(),
@@ -48,14 +46,14 @@ public class CustomerController {
                     customerDto.getAddress(),
                     customerDto.getActive()
             ));
-        } catch(UnknownAddressException | UnknownStoreException e){
+        } catch (UnknownAddressException | UnknownStoreException e) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
         }
     }
 
     @DeleteMapping("/Customer")
-    public void deleteFirstMatchingCustomer(@RequestBody CustomerDto customerDto){
-        try{
+    public void deleteFirstMatchingCustomer(@RequestBody CustomerDto customerDto) {
+        try {
             service.deleteCustomer(new Customer(
                     customerDto.getStoreAddress(),
                     customerDto.getFirstName(),
@@ -64,14 +62,14 @@ public class CustomerController {
                     customerDto.getAddress(),
                     customerDto.getActive()
             ));
-        } catch(UnknownCustomerException | UnknownAddressException | UnknownStoreException e){
+        } catch (UnknownCustomerException | UnknownAddressException | UnknownStoreException e) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
         }
     }
 
     @PutMapping("/Customer")
-    public void updateFirstMatchingCustomer(@RequestBody CustomerUpdateDto customerUpdateDto){
-        try{
+    public void updateFirstMatchingCustomer(@RequestBody CustomerUpdateDto customerUpdateDto) {
+        try {
             service.updateFirstMatch(
                     new Customer(
                             customerUpdateDto.getStoreAddress(),
@@ -90,7 +88,7 @@ public class CustomerController {
                             customerUpdateDto.getUpdatedActive()
                     )
             );
-        } catch(UnknownCustomerException | UnknownAddressException | UnknownStoreException e){
+        } catch (UnknownCustomerException | UnknownAddressException | UnknownStoreException e) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
         }
     }

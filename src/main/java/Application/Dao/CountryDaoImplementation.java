@@ -2,9 +2,8 @@ package Application.Dao;
 
 import Application.Dao.Entity.CountryEntity;
 import Application.Dao.Repository.CountryRepository;
-import Application.Model.Country;
 import Application.Exception.UnknownCountryException;
-
+import Application.Model.Country;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -17,7 +16,7 @@ import java.util.stream.StreamSupport;
 
 @Service
 @RequiredArgsConstructor
-public class CountryDaoImplementation implements CountryDao{
+public class CountryDaoImplementation implements CountryDao {
 
     private final CountryRepository countryRepository;
 
@@ -38,11 +37,10 @@ public class CountryDaoImplementation implements CountryDao{
                 .country(country.getCountry())
                 .lastUpdate(new Timestamp((new Date()).getTime()))
                 .build();
-        try{
+        try {
             countryRepository.save(countryEntity);
-        }
-        catch(Exception e){
-            System.out.println("ERROR:" +e.getMessage());
+        } catch (Exception e) {
+            System.out.println("ERROR:" + e.getMessage());
         }
 
 
@@ -55,18 +53,17 @@ public class CountryDaoImplementation implements CountryDao{
                 .stream()
                 .findFirst();
 
-        if(!countryEntity.isPresent()){
+        if (!countryEntity.isPresent()) {
             throw new UnknownCountryException(country, "Country unknown");
         }
 
         countryEntity.get().setCountry(updatedCountry.getCountry());
         countryEntity.get().setLastUpdate(new Timestamp((new Date()).getTime()));
 
-        try{
+        try {
             countryRepository.save(countryEntity.get());
-        }
-        catch(Exception e){
-            System.out.println("ERROR: " +e.getMessage());
+        } catch (Exception e) {
+            System.out.println("ERROR: " + e.getMessage());
         }
 
     }
@@ -78,15 +75,14 @@ public class CountryDaoImplementation implements CountryDao{
                 .stream()
                 .findFirst();
 
-        if(!countryEntity.isPresent()){
+        if (!countryEntity.isPresent()) {
             throw new UnknownCountryException(country, "Country unknown");
         }
 
-        try{
+        try {
             countryRepository.delete(countryEntity.get());
-        }
-        catch(Exception e){
-            System.out.println("ERROR:" +e.getMessage());
+        } catch (Exception e) {
+            System.out.println("ERROR:" + e.getMessage());
         }
 
     }

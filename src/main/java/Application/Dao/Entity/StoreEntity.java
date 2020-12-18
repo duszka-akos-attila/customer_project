@@ -1,6 +1,7 @@
 package Application.Dao.Entity;
 
 import lombok.*;
+import org.hibernate.annotations.OnDelete;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
@@ -16,7 +17,7 @@ public class StoreEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name="store_id")
+    @Column(name = "store_id")
     private int storeId;
 
     @OneToOne

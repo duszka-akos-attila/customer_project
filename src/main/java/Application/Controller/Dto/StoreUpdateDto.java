@@ -10,7 +10,7 @@ import lombok.experimental.SuperBuilder;
 @SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
-public class StoreUpdateDto extends StoreDto{
+public class StoreUpdateDto extends StoreDto {
     private String updatedManagerFirstName;
     private String updatedManagerLastName;
     private String updatedAddress;

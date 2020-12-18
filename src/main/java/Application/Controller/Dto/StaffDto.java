@@ -5,9 +5,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
-import java.sql.Blob;
-import java.sql.Timestamp;
-
 @Data
 @SuperBuilder
 @NoArgsConstructor

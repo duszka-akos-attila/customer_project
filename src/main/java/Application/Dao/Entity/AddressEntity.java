@@ -1,8 +1,8 @@
 package Application.Dao.Entity;
 
 import lombok.*;
-
 import org.locationtech.jts.geom.Point;
+
 import javax.persistence.*;
 import java.sql.Timestamp;
 
@@ -17,7 +17,7 @@ public class AddressEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name="address_id")
+    @Column(name = "address_id")
     private int addressId;
 
     @Column(name = "address")

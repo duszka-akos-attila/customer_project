@@ -1,8 +1,8 @@
 package Application.Service;
 
 import Application.Dao.CountryDao;
-import Application.Model.Country;
 import Application.Exception.UnknownCountryException;
+import Application.Model.Country;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -10,7 +10,7 @@ import java.util.Collection;
 
 @Service
 @RequiredArgsConstructor
-public class CountryServiceImplementation implements CountryService{
+public class CountryServiceImplementation implements CountryService {
 
     private final CountryDao countryDao;
 

@@ -5,13 +5,11 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
-import java.sql.Blob;
-
 @Data
 @SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
-public class StaffUpdateDto extends StaffDto{
+public class StaffUpdateDto extends StaffDto {
     private String updatedFirstName;
     private String updatedLastName;
     private String updatedAddress;
