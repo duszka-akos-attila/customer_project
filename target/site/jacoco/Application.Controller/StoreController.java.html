@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="hu"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>StoreController.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">customer_project</a> &gt; <a href="index.source.html" class="el_package">Application.Controller</a> &gt; <span class="el_source">StoreController.java</span></div><h1>StoreController.java</h1><pre class="source lang-java linenums">package Application.Controller;
+
+import Application.Controller.Dto.CityDto;
+import Application.Controller.Dto.CityUpdateDto;
+import Application.Controller.Dto.StoreDto;
+import Application.Controller.Dto.StoreUpdateDto;
+import Application.Exception.*;
+import Application.Model.City;
+import Application.Model.Store;
+import Application.Service.CityService;
+import Application.Service.StoreService;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
+
+import java.util.Collection;
+import java.util.stream.Collectors;
+
+@RestController
+@RequiredArgsConstructor
+public class StoreController {
+    private final StoreService service;
+
+    @GetMapping(&quot;/Store&quot;)
+    public Collection&lt;StoreDto&gt; listStores(){
+<span class="nc" id="L27">        return service.getAllStores()</span>
+<span class="nc" id="L28">                .stream()</span>
+<span class="nc" id="L29">                .map( model -&gt; StoreDto.builder()</span>
+<span class="nc" id="L30">                        .managerFirstName(model.getManagerFirstName())</span>
+<span class="nc" id="L31">                        .managerLastName(model.getManagerLastName())</span>
+<span class="nc" id="L32">                        .address(model.getAddress())</span>
+<span class="nc" id="L33">                        .build())</span>
+<span class="nc" id="L34">                .collect(Collectors.toList());</span>
+    }
+
+    @PostMapping(&quot;/Store&quot;)
+    public void recordStore(@RequestBody StoreDto storeDto){
+        try{
+<span class="nc" id="L40">            service.recordStore(new Store(</span>
+<span class="nc" id="L41">                    storeDto.getManagerFirstName(),</span>
+<span class="nc" id="L42">                    storeDto.getManagerLastName(),</span>
+<span class="nc" id="L43">                    storeDto.getAddress()</span>
+            ));
+<span class="nc" id="L45">        } catch(UnknownStaffException | UnknownAddressException e){</span>
+<span class="nc" id="L46">            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());</span>
+<span class="nc" id="L47">        }</span>
+<span class="nc" id="L48">    }</span>
+
+    @DeleteMapping(&quot;/Store&quot;)
+    public void deleteFirstMatchingStore(@RequestBody StoreDto storeDto){
+        try{
+<span class="nc" id="L53">            service.deleteStore(new Store(</span>
+<span class="nc" id="L54">                    storeDto.getManagerFirstName(),</span>
+<span class="nc" id="L55">                    storeDto.getManagerLastName(),</span>
+<span class="nc" id="L56">                    storeDto.getAddress()</span>
+            ));
+<span class="nc" id="L58">        } catch(UnknownStaffException | UnknownAddressException | UnknownStoreException e){</span>
+<span class="nc" id="L59">            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());</span>
+<span class="nc" id="L60">        }</span>
+<span class="nc" id="L61">    }</span>
+
+    @PutMapping(&quot;/Store&quot;)
+    public void updateFirstMatchingStore(@RequestBody StoreUpdateDto storeUpdateDto){
+        try{
+<span class="nc" id="L66">            service.updateFirstMatch(</span>
+                    new Store(
+<span class="nc" id="L68">                            storeUpdateDto.getManagerFirstName(),</span>
+<span class="nc" id="L69">                            storeUpdateDto.getManagerLastName(),</span>
+<span class="nc" id="L70">                            storeUpdateDto.getAddress()</span>
+                    ),
+                    new Store(
+<span class="nc" id="L73">                            storeUpdateDto.getUpdatedManagerFirstName(),</span>
+<span class="nc" id="L74">                            storeUpdateDto.getUpdatedManagerLastName(),</span>
+<span class="nc" id="L75">                            storeUpdateDto.getUpdatedAddress()</span>
+                    )
+            );
+<span class="nc" id="L78">        } catch(UnknownStaffException | UnknownAddressException | UnknownStoreException e){</span>
+<span class="nc" id="L79">            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());</span>
+<span class="nc" id="L80">        }</span>
+<span class="nc" id="L81">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

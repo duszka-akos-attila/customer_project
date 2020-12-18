@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="hu"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>StaffServiceImplementation.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">customer_project</a> &gt; <a href="index.source.html" class="el_package">Application.Service</a> &gt; <span class="el_source">StaffServiceImplementation.java</span></div><h1>StaffServiceImplementation.java</h1><pre class="source lang-java linenums">package Application.Service;
+
+import Application.Dao.StaffDao;
+import Application.Model.Staff;
+import Application.Exception.UnknownAddressException;
+import Application.Exception.UnknownStoreException;
+import Application.Exception.UnknownStaffException;
+
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
+
+import java.util.Collection;
+
+@Service
+@RequiredArgsConstructor
+public class StaffServiceImplementation implements StaffService{
+
+    private final StaffDao staffDao;
+
+    @Override
+    public Collection&lt;Staff&gt; getAllStaffs() {
+<span class="nc" id="L22">        return staffDao.readAll();</span>
+    }
+
+    @Override
+    public void recordStaff(Staff staff) throws UnknownAddressException, UnknownStoreException {
+<span class="nc" id="L27">        staffDao.createStaff(staff);</span>
+<span class="nc" id="L28">    }</span>
+
+    @Override
+    public void updateFirstMatch(Staff originalStaff, Staff updatedStaff) throws UnknownAddressException, UnknownStaffException, UnknownStoreException {
+<span class="nc" id="L32">        staffDao.updateFirstMatch(originalStaff, updatedStaff);</span>
+<span class="nc" id="L33">    }</span>
+
+    @Override
+    public void deleteStaff(Staff staff) throws UnknownAddressException, UnknownStaffException, UnknownStoreException {
+<span class="nc" id="L37">        staffDao.deleteStaff(staff);</span>
+<span class="nc" id="L38">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

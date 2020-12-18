@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="hu"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>StaffDaoImplementation.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">customer_project</a> &gt; <a href="index.source.html" class="el_package">Application.Dao</a> &gt; <span class="el_source">StaffDaoImplementation.java</span></div><h1>StaffDaoImplementation.java</h1><pre class="source lang-java linenums">package Application.Dao;
+
+import Application.Dao.Entity.AddressEntity;
+import Application.Dao.Entity.StaffEntity;
+import Application.Dao.Entity.StoreEntity;
+import Application.Dao.Repository.AddressRepository;
+import Application.Dao.Repository.StaffRepository;
+import Application.Dao.Repository.StoreRepository;
+import Application.Model.Staff;
+import Application.Exception.UnknownAddressException;
+import Application.Exception.UnknownStaffException;
+import Application.Exception.UnknownStoreException;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
+
+import java.sql.Timestamp;
+import java.util.Collection;
+import java.util.Date;
+import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
+
+@Service
+@RequiredArgsConstructor
+public class StaffDaoImplementation implements StaffDao{
+
+    private final StoreRepository storeRepository;
+    private final AddressRepository addressRepository;
+    private final StaffRepository staffRepository;
+
+    @Override
+    public Collection&lt;Staff&gt; readAll() {
+<span class="fc" id="L33">        return StreamSupport.stream(staffRepository.findAll().spliterator(),false)</span>
+<span class="pc" id="L34">                .map(entity -&gt; new Staff(</span>
+<span class="nc" id="L35">                        entity.getFirstName(),</span>
+<span class="nc" id="L36">                        entity.getLastName(),</span>
+<span class="nc" id="L37">                        entity.getAddressEntity().getAddress(),</span>
+                        //entity.getPicture(),
+<span class="nc" id="L39">                        entity.getEmail(),</span>
+<span class="nc" id="L40">                        entity.getStoreEntity().getAddressEntity().getAddress(),</span>
+<span class="nc" id="L41">                        entity.getActive(),</span>
+<span class="nc" id="L42">                        entity.getUsername(),</span>
+<span class="nc" id="L43">                        entity.getPassword()</span>
+                ))
+<span class="fc" id="L45">                .collect(Collectors.toList());</span>
+
+    }
+
+    @Override
+    public void createStaff(Staff staff) throws UnknownAddressException, UnknownStoreException {
+        StaffEntity staffEntity;
+
+<span class="fc" id="L53">        staffEntity = StaffEntity.builder()</span>
+<span class="fc" id="L54">                .firstName(staff.getFirstName())</span>
+<span class="fc" id="L55">                .lastName(staff.getLastName())</span>
+<span class="fc" id="L56">                .addressEntity(queryAddress(staff.getAddress()))</span>
+                //.picture(staff.getPicture())
+<span class="fc" id="L58">                .email(staff.getEmail())</span>
+<span class="fc" id="L59">                .storeEntity(queryStore(staff.getStoreAddress()))</span>
+<span class="fc" id="L60">                .active(staff.getActive())</span>
+<span class="fc" id="L61">                .username(staff.getUsername())</span>
+<span class="fc" id="L62">                .password(staff.getPassword())</span>
+<span class="fc" id="L63">                .lastUpdate(new Timestamp((new Date()).getTime()))</span>
+<span class="fc" id="L64">                .build();</span>
+
+        try{
+<span class="fc" id="L67">            staffRepository.save(staffEntity);</span>
+        }
+<span class="nc" id="L69">        catch(Exception e){</span>
+<span class="nc" id="L70">            System.out.println(&quot;ERROR: &quot; +e.getMessage());</span>
+<span class="fc" id="L71">        }</span>
+<span class="fc" id="L72">    }</span>
+
+    @Override
+    public void updateFirstMatch(Staff staff, Staff updatedStaff) throws UnknownStaffException, UnknownAddressException, UnknownStoreException {
+<span class="nc" id="L76">        Optional&lt;StaffEntity&gt; staffEntity = staffRepository.findByFirstNameAndLastNameAndAddressEntityAndEmailAndStoreEntityAndActiveAndUsername(</span>
+<span class="nc" id="L77">                staff.getFirstName(),</span>
+<span class="nc" id="L78">                staff.getLastName(),</span>
+<span class="nc" id="L79">                queryAddress(staff.getAddress()),</span>
+<span class="nc" id="L80">                staff.getEmail(),</span>
+<span class="nc" id="L81">                queryStore(staff.getStoreAddress()),</span>
+<span class="nc" id="L82">                staff.getActive(),</span>
+<span class="nc" id="L83">                staff.getUsername())</span>
+<span class="nc" id="L84">                .stream()</span>
+<span class="nc" id="L85">                .findFirst();</span>
+
+<span class="nc bnc" id="L87" title="All 2 branches missed.">        if(!staffEntity.isPresent()){</span>
+<span class="nc" id="L88">            throw new UnknownStaffException(staff, &quot;Staff unknown&quot;);</span>
+        }
+
+<span class="nc" id="L91">        staffEntity.get().setFirstName(updatedStaff.getFirstName());</span>
+<span class="nc" id="L92">        staffEntity.get().setLastName(updatedStaff.getLastName());</span>
+<span class="nc" id="L93">        staffEntity.get().setAddressEntity(queryAddress(updatedStaff.getAddress()));</span>
+        //staffEntity.get().setPicture(updatedStaff.getPicture());
+<span class="nc" id="L95">        staffEntity.get().setEmail(updatedStaff.getEmail());</span>
+<span class="nc" id="L96">        staffEntity.get().setStoreEntity(queryStore(updatedStaff.getStoreAddress()));</span>
+<span class="nc" id="L97">        staffEntity.get().setActive(updatedStaff.getActive());</span>
+<span class="nc" id="L98">        staffEntity.get().setUsername(updatedStaff.getUsername());</span>
+<span class="nc" id="L99">        staffEntity.get().setPassword(updatedStaff.getPassword());</span>
+<span class="nc" id="L100">        staffEntity.get().setLastUpdate(new Timestamp((new Date()).getTime()));</span>
+
+        try{
+<span class="nc" id="L103">            staffRepository.save(staffEntity.get());</span>
+        }
+<span class="nc" id="L105">        catch(Exception e){</span>
+<span class="nc" id="L106">            System.out.println(&quot;ERROR: &quot; +e.getMessage());</span>
+<span class="nc" id="L107">        }</span>
+<span class="nc" id="L108">    }</span>
+
+    @Override
+    public void deleteStaff(Staff staff) throws UnknownStaffException, UnknownAddressException, UnknownStoreException {
+<span class="nc" id="L112">        Optional&lt;StaffEntity&gt; staffEntity = staffRepository.findByFirstNameAndLastNameAndAddressEntityAndEmailAndStoreEntityAndActiveAndUsername(</span>
+<span class="nc" id="L113">                staff.getFirstName(),</span>
+<span class="nc" id="L114">                staff.getLastName(),</span>
+<span class="nc" id="L115">                queryAddress(staff.getAddress()),</span>
+<span class="nc" id="L116">                staff.getEmail(),</span>
+<span class="nc" id="L117">                queryStore(staff.getStoreAddress()),</span>
+<span class="nc" id="L118">                staff.getActive(),</span>
+<span class="nc" id="L119">                staff.getUsername())</span>
+<span class="nc" id="L120">                .stream()</span>
+<span class="nc" id="L121">                .findFirst();</span>
+<span class="nc bnc" id="L122" title="All 2 branches missed.">        if(!staffEntity.isPresent()){</span>
+<span class="nc" id="L123">            throw new UnknownStaffException(staff, &quot;Staff unknown&quot;);</span>
+        }
+
+        try{
+<span class="nc" id="L127">            staffRepository.delete(staffEntity.get());</span>
+        }
+<span class="nc" id="L129">        catch(Exception e){</span>
+<span class="nc" id="L130">            System.out.println(&quot;ERROR:&quot; +e.getMessage());</span>
+<span class="nc" id="L131">        }</span>
+<span class="nc" id="L132">    }</span>
+
+    protected AddressEntity queryAddress(String address) throws UnknownAddressException {
+<span class="nc" id="L135">        Optional&lt;AddressEntity&gt; addressEntity = addressRepository.findByAddress(address).stream()</span>
+<span class="nc" id="L136">                .filter(entity -&gt; entity.getAddress().equals(address))</span>
+<span class="nc" id="L137">                .findFirst();</span>
+<span class="nc bnc" id="L138" title="All 2 branches missed.">        if( !addressEntity.isPresent()){</span>
+<span class="nc" id="L139">            throw new UnknownAddressException(&quot;Address unknown&quot;);</span>
+        }
+<span class="nc" id="L141">        return addressEntity.get();</span>
+    }
+
+    protected StoreEntity queryStore(String address) throws UnknownStoreException {
+<span class="nc" id="L145">        Optional&lt;StoreEntity&gt; storeEntity = storeRepository.findByAddressEntity_Address(address).stream()</span>
+<span class="nc" id="L146">                .filter(entity -&gt; entity.getAddressEntity().getAddress().equals(address))</span>
+<span class="nc" id="L147">                .findFirst();</span>
+<span class="nc bnc" id="L148" title="All 2 branches missed.">        if( !storeEntity.isPresent()){</span>
+<span class="nc" id="L149">            throw new UnknownStoreException(&quot;Store unknown&quot;);</span>
+        }
+<span class="nc" id="L151">        return storeEntity.get();</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

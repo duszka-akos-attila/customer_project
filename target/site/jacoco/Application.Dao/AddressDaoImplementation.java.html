@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="hu"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>AddressDaoImplementation.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">customer_project</a> &gt; <a href="index.source.html" class="el_package">Application.Dao</a> &gt; <span class="el_source">AddressDaoImplementation.java</span></div><h1>AddressDaoImplementation.java</h1><pre class="source lang-java linenums">package Application.Dao;
+
+import Application.Dao.Entity.AddressEntity;
+import Application.Dao.Entity.CityEntity;
+import Application.Dao.Entity.CountryEntity;
+import Application.Dao.Repository.AddressRepository;
+import Application.Dao.Repository.CityRepository;
+import Application.Dao.Repository.CountryRepository;
+import Application.Exception.UnknownCityException;
+import Application.Exception.UnknownCountryException;
+import Application.Model.Address;
+import Application.Exception.UnknownAddressException;
+import lombok.RequiredArgsConstructor;
+import org.locationtech.jts.geom.Coordinate;
+import org.locationtech.jts.geom.GeometryFactory;
+import org.springframework.stereotype.Service;
+
+import java.sql.Timestamp;
+import java.util.Collection;
+import java.util.Date;
+import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
+
+@Service
+@RequiredArgsConstructor
+public class AddressDaoImplementation implements AddressDao{
+
+    private final AddressRepository addressRepository;
+    private final CityRepository cityRepository;
+    private final CountryRepository countryRepository;
+
+    @Override
+    public Collection&lt;Address&gt; readAll() {
+<span class="fc" id="L35">        return StreamSupport.stream(addressRepository.findAll().spliterator(),false)</span>
+<span class="pc" id="L36">                .map(entity -&gt; new Address(</span>
+<span class="nc" id="L37">                        entity.getAddress(),</span>
+<span class="nc" id="L38">                        entity.getAddress2(),</span>
+<span class="nc" id="L39">                        entity.getDistrict(),</span>
+<span class="nc" id="L40">                        entity.getCityEntity().getCity(),</span>
+<span class="nc" id="L41">                        entity.getCityEntity().getCountryEntity().getCountry(),</span>
+<span class="nc" id="L42">                        entity.getPostalCode(),</span>
+<span class="nc" id="L43">                        entity.getPhone()</span>
+                ))
+<span class="fc" id="L45">                .collect(Collectors.toList());</span>
+    }
+
+    @Override
+    public void createAddress(Address address) throws UnknownCityException {
+        AddressEntity addressEntity;
+<span class="fc" id="L51">        GeometryFactory geometryFactory = new GeometryFactory();</span>
+
+<span class="fc" id="L53">        addressEntity = AddressEntity.builder()</span>
+<span class="fc" id="L54">                .address(address.getAddress())</span>
+<span class="fc" id="L55">                .address2(address.getAddress2())</span>
+<span class="fc" id="L56">                .district(address.getDistrict())</span>
+<span class="fc" id="L57">                .cityEntity(queryCity(address.getCity(), address.getCountry()))</span>
+<span class="fc" id="L58">                .postalCode(address.getPostalCode())</span>
+<span class="fc" id="L59">                .phone(address.getPhone())</span>
+<span class="fc" id="L60">                .location(geometryFactory.createPoint(new Coordinate()))</span>
+<span class="fc" id="L61">                .lastUpdate(new Timestamp((new Date()).getTime()))</span>
+<span class="fc" id="L62">                .build();</span>
+
+        try{
+<span class="fc" id="L65">            addressRepository.save(addressEntity);</span>
+        }
+<span class="nc" id="L67">        catch(Exception e){</span>
+<span class="nc" id="L68">            System.out.println(&quot;ERROR: &quot; +e.getMessage());</span>
+<span class="fc" id="L69">        }</span>
+<span class="fc" id="L70">    }</span>
+
+    @Override
+    public void updateFirstMatch(Address address, Address updatedAddress) throws UnknownAddressException, UnknownCountryException, UnknownCityException {
+<span class="nc" id="L74">        Optional&lt;AddressEntity&gt; addressEntity = addressRepository.findByAddressAndAddress2AndDistrictAndCityEntityAndPostalCodeAndPhone(</span>
+<span class="nc" id="L75">                address.getAddress(),</span>
+<span class="nc" id="L76">                address.getAddress2(),</span>
+<span class="nc" id="L77">                address.getDistrict(),</span>
+<span class="nc" id="L78">                queryCity(address.getCity(), address.getCountry()),</span>
+<span class="nc" id="L79">                address.getPostalCode(),</span>
+<span class="nc" id="L80">                address.getPhone())</span>
+<span class="nc" id="L81">                .stream()</span>
+<span class="nc" id="L82">                .findFirst();</span>
+
+<span class="nc bnc" id="L84" title="All 2 branches missed.">        if(!addressEntity.isPresent()){</span>
+<span class="nc" id="L85">            throw new UnknownAddressException(address, &quot;Address unknown: &quot;+ address.toString());</span>
+        }
+
+<span class="nc" id="L88">        addressEntity.get().setAddress(updatedAddress.getAddress());</span>
+<span class="nc" id="L89">        addressEntity.get().setAddress2(updatedAddress.getAddress2());</span>
+<span class="nc" id="L90">        addressEntity.get().setDistrict(updatedAddress.getDistrict());</span>
+<span class="nc" id="L91">        addressEntity.get().setCityEntity(queryCity(updatedAddress.getCity(), updatedAddress.getCountry()));</span>
+<span class="nc" id="L92">        addressEntity.get().setPostalCode(updatedAddress.getPostalCode());</span>
+<span class="nc" id="L93">        addressEntity.get().setPhone(updatedAddress.getPhone());</span>
+<span class="nc" id="L94">        addressEntity.get().setLastUpdate(new Timestamp((new Date()).getTime()));</span>
+
+        try{
+<span class="nc" id="L97">            addressRepository.save(addressEntity.get());</span>
+        }
+<span class="nc" id="L99">        catch(Exception e){</span>
+<span class="nc" id="L100">            System.out.println(&quot;ERROR: &quot; +e.getMessage());</span>
+<span class="nc" id="L101">        }</span>
+<span class="nc" id="L102">    }</span>
+
+    @Override
+    public void deleteAddress(Address address) throws UnknownAddressException, UnknownCityException {
+<span class="nc" id="L106">        Optional&lt;AddressEntity&gt; addressEntity = addressRepository.findByAddressAndAddress2AndDistrictAndCityEntityAndPostalCodeAndPhone(</span>
+<span class="nc" id="L107">                address.getAddress(),</span>
+<span class="nc" id="L108">                address.getAddress2(),</span>
+<span class="nc" id="L109">                address.getDistrict(),</span>
+<span class="nc" id="L110">                queryCity(address.getCity(), address.getCountry()),</span>
+<span class="nc" id="L111">                address.getPostalCode(),</span>
+<span class="nc" id="L112">                address.getPhone())</span>
+<span class="nc" id="L113">                .stream()</span>
+<span class="nc" id="L114">                .findFirst();</span>
+
+<span class="nc bnc" id="L116" title="All 2 branches missed.">        if(!addressEntity.isPresent()){</span>
+<span class="nc" id="L117">            throw new UnknownAddressException(address, &quot;Address unknown&quot;);</span>
+        }
+
+        try{
+<span class="nc" id="L121">            addressRepository.delete(addressEntity.get());</span>
+        }
+<span class="nc" id="L123">        catch(Exception e){</span>
+<span class="nc" id="L124">            System.out.println(&quot;ERROR:&quot; +e.getMessage());</span>
+<span class="nc" id="L125">        }</span>
+<span class="nc" id="L126">    }</span>
+
+    protected CityEntity queryCity(String city, String country) throws UnknownCityException {
+<span class="nc" id="L129">        Optional&lt;CityEntity&gt; cityEntity = cityRepository.findByCity(city).stream()</span>
+<span class="nc" id="L130">                .filter(entity -&gt;</span>
+<span class="nc" id="L131">                        entity.getCountryEntity().getCountry().equals(country))</span>
+<span class="nc" id="L132">                .findFirst();</span>
+<span class="nc bnc" id="L133" title="All 2 branches missed.">        if (!cityEntity.isPresent()) {</span>
+<span class="nc" id="L134">            Optional&lt;CountryEntity&gt; countryEntity = countryRepository.findByCountry(country);</span>
+<span class="nc bnc" id="L135" title="All 2 branches missed.">            if (!countryEntity.isPresent()) {</span>
+<span class="nc" id="L136">                throw new UnknownCityException(&quot;There is no city, named: &quot; + city);</span>
+            }
+        }
+<span class="nc" id="L139">        return cityEntity.get();</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

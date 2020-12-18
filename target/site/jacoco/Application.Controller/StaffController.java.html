@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="hu"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>StaffController.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">customer_project</a> &gt; <a href="index.source.html" class="el_package">Application.Controller</a> &gt; <span class="el_source">StaffController.java</span></div><h1>StaffController.java</h1><pre class="source lang-java linenums">package Application.Controller;
+
+import Application.Controller.Dto.CityDto;
+import Application.Controller.Dto.CityUpdateDto;
+import Application.Controller.Dto.StaffDto;
+import Application.Controller.Dto.StaffUpdateDto;
+import Application.Exception.*;
+import Application.Model.City;
+import Application.Model.Staff;
+import Application.Service.CityService;
+import Application.Service.StaffService;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
+
+import java.sql.Blob;
+import java.util.Base64;
+import java.util.Collection;
+import java.util.stream.Collectors;
+
+@RestController
+@RequiredArgsConstructor
+public class StaffController {
+    private final StaffService service;
+
+    @GetMapping(&quot;/Staff&quot;)
+    public Collection&lt;StaffDto&gt; listStaffs(){
+<span class="nc" id="L29">        return service.getAllStaffs()</span>
+<span class="nc" id="L30">                .stream()</span>
+<span class="nc" id="L31">                .map( model -&gt; StaffDto.builder()</span>
+<span class="nc" id="L32">                        .firstName(model.getFirstName())</span>
+<span class="nc" id="L33">                        .lastName(model.getLastName())</span>
+<span class="nc" id="L34">                        .address(model.getAddress())</span>
+                        //.picture(model.getPicture())
+<span class="nc" id="L36">                        .email(model.getEmail())</span>
+<span class="nc" id="L37">                        .storeAddress(model.getStoreAddress())</span>
+<span class="nc" id="L38">                        .active(model.getActive())</span>
+<span class="nc" id="L39">                        .username(model.getUsername())</span>
+<span class="nc" id="L40">                        .build())</span>
+<span class="nc" id="L41">                .collect(Collectors.toList());</span>
+    }
+
+    @PostMapping(&quot;/Staff&quot;)
+    public void recordStaff(@RequestBody StaffDto staffDto){
+        try{
+<span class="nc" id="L47">            service.recordStaff(new Staff(</span>
+<span class="nc" id="L48">                    staffDto.getFirstName(),</span>
+<span class="nc" id="L49">                    staffDto.getLastName(),</span>
+<span class="nc" id="L50">                    staffDto.getAddress(),</span>
+                    //staffDto.getPicture(),
+<span class="nc" id="L52">                    staffDto.getEmail(),</span>
+<span class="nc" id="L53">                    staffDto.getStoreAddress(),</span>
+<span class="nc" id="L54">                    staffDto.getActive(),</span>
+<span class="nc" id="L55">                    staffDto.getUsername(),</span>
+<span class="nc" id="L56">                    staffDto.getPassword()</span>
+            ));
+<span class="nc" id="L58">        } catch(UnknownStoreException | UnknownAddressException e){</span>
+<span class="nc" id="L59">            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());</span>
+<span class="nc" id="L60">        }</span>
+<span class="nc" id="L61">    }</span>
+
+    @DeleteMapping(&quot;/Staff&quot;)
+    public void deleteFirstMatchingStaff(@RequestBody StaffDto staffDto){
+        try{
+<span class="nc" id="L66">            service.deleteStaff(new Staff(</span>
+<span class="nc" id="L67">                    staffDto.getFirstName(),</span>
+<span class="nc" id="L68">                    staffDto.getLastName(),</span>
+<span class="nc" id="L69">                    staffDto.getAddress(),</span>
+                    //staffDto.getPicture(),
+<span class="nc" id="L71">                    staffDto.getEmail(),</span>
+<span class="nc" id="L72">                    staffDto.getStoreAddress(),</span>
+<span class="nc" id="L73">                    staffDto.getActive(),</span>
+<span class="nc" id="L74">                    staffDto.getUsername(),</span>
+<span class="nc" id="L75">                    staffDto.getPassword()</span>
+            ));
+<span class="nc" id="L77">        } catch(UnknownStoreException | UnknownAddressException | UnknownStaffException e){</span>
+<span class="nc" id="L78">            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());</span>
+<span class="nc" id="L79">        }</span>
+<span class="nc" id="L80">    }</span>
+
+    @PutMapping(&quot;/Staff&quot;)
+    public void updateFirstMatchingStaff(@RequestBody StaffUpdateDto staffUpdateDto){
+        try{
+<span class="nc" id="L85">            service.updateFirstMatch(</span>
+                    new Staff(
+<span class="nc" id="L87">                            staffUpdateDto.getFirstName(),</span>
+<span class="nc" id="L88">                            staffUpdateDto.getLastName(),</span>
+<span class="nc" id="L89">                            staffUpdateDto.getAddress(),</span>
+                            //staffUpdateDto.getPicture(),
+<span class="nc" id="L91">                            staffUpdateDto.getEmail(),</span>
+<span class="nc" id="L92">                            staffUpdateDto.getStoreAddress(),</span>
+<span class="nc" id="L93">                            staffUpdateDto.getActive(),</span>
+<span class="nc" id="L94">                            staffUpdateDto.getUsername(),</span>
+<span class="nc" id="L95">                            staffUpdateDto.getPassword()</span>
+                    ),
+                    new Staff(
+<span class="nc" id="L98">                            staffUpdateDto.getUpdatedFirstName(),</span>
+<span class="nc" id="L99">                            staffUpdateDto.getUpdatedLastName(),</span>
+<span class="nc" id="L100">                            staffUpdateDto.getUpdatedAddress(),</span>
+                            //staffUpdateDto.getUpdatedPicture(),
+<span class="nc" id="L102">                            staffUpdateDto.getUpdatedEmail(),</span>
+<span class="nc" id="L103">                            staffUpdateDto.getUpdatedStoreAddress(),</span>
+<span class="nc" id="L104">                            staffUpdateDto.getUpdatedActive(),</span>
+<span class="nc" id="L105">                            staffUpdateDto.getUpdatedUsername(),</span>
+<span class="nc" id="L106">                            staffUpdateDto.getUpdatedPassword()</span>
+                    )
+            );
+<span class="nc" id="L109">        } catch(UnknownStoreException | UnknownAddressException | UnknownStaffException e){</span>
+<span class="nc" id="L110">            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());</span>
+<span class="nc" id="L111">        }</span>
+<span class="nc" id="L112">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

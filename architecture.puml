@@ -3,11 +3,11 @@
 package "Backend" {
 
     package "End Point" {
-        [Controller] - [DTO]
+        [Application.Controller] - [DTO]
     }
 
     package "Business Logic" {
-        [Service] - [Model]
+        [Application.Service] - [Application.Model]
     }
 
     package "Data Access Object" {
@@ -15,8 +15,8 @@ package "Backend" {
         [Repository] -right- [Entity] : use
     }
 
-    [Controller] -down- [Service]
-    [Service] -down- [DAO]
+    [Application.Controller] -down- [Application.Service]
+    [Application.Service] -down- [DAO]
 
 }
 
@@ -25,7 +25,7 @@ JDBC -left- [Sample Database]
 }
 
 
-HTTP -down- [Controller]
+HTTP -down- [Application.Controller]
 [Repository] -down- JDBC
 
 
